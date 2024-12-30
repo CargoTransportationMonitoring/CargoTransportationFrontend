@@ -1,4 +1,6 @@
-import React, {JSX} from "react";
+import React, {JSX, useEffect} from "react";
+import {getIdToken, getKeycloakInstance} from "../auth/KeycloakService";
+import Keycloak from "keycloak-js";
 
 const Profile: React.FC = (): JSX.Element => {
 
@@ -14,8 +16,8 @@ const Profile: React.FC = (): JSX.Element => {
 
     return (
         <div>
-            <h1>Email: {parseJwt(localStorage.getItem('id_token')!!)['email']}</h1>
-            <h1>Preferred name: {parseJwt(localStorage.getItem('id_token')!!)['preferred_username']}</h1>
+            <h1>Email: {parseJwt(getIdToken())['email']}</h1>
+            <h1>Preferred name: {parseJwt(getIdToken())['preferred_username']}</h1>
         </div>
     )
 }
