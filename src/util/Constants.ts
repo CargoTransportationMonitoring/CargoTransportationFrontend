@@ -9,3 +9,8 @@ export const GRANT_TYPE_AUTHORIZATION_CODE: string = 'authorization_code';
 export const RESOURCE_SERVER_ADMIN_URI: string = 'http://localhost:8081/test/admin'
 export const RESOURCE_SERVER_USER_URI: string = 'http://localhost:8081/test/user'
 export const CLIENT_ROOT_URI: string = 'http://localhost:3000/auth'
+
+
+export const REACT_APP_KEYCLOAK_URL: string = "http://localhost:8080"
+export const REACT_APP_KEYCLOAK_REALM: string = "cargotransportation-realm"
+export const REACT_APP_KEYCLOAK_CLIENT_ID: string = "cargotransportation-client"

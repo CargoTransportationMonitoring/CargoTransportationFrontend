@@ -1,19 +1,13 @@
 import {configureStore} from "@reduxjs/toolkit";
 import errorReducer from "./slices/ErrorSlice";
-import authReducer from "./slices/AuthType";
-import {AuthType} from "./slices/AuthType";
 
 type RootReducer = {
-    error: string,
-    auth: AuthType
+    error: string
 };
 
 const store = configureStore<RootReducer>({
     reducer: {
-        error: errorReducer,
-        auth: authReducer
+        error: errorReducer
     }
 })
-
-export type RootState = ReturnType<typeof store.getState>;
 export default store;
