@@ -1,4 +1,6 @@
-const AdminRouteTab = () => {
+import React, {JSX} from "react";
+
+const AdminRouteTab: React.FC = (): JSX.Element => {
     return (
         <div>
             <h1>Маршруты</h1>

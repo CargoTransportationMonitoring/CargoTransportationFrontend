@@ -1,8 +1,8 @@
+import React, {JSX} from "react";
 import {Outlet} from "react-router-dom";
-import {JSX} from "react";
 import Menu from "./Menu";
 
-const MainLayout = (): JSX.Element => {
+const MainLayout: React.FC = (): JSX.Element => {
     return (
         <>
             <Menu/>

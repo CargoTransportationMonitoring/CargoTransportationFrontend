@@ -1,6 +1,6 @@
-import {JSX} from "react";
+import React, {JSX} from "react";
 
-const NotFound = (): JSX.Element => {
+const NotFound: React.FC = (): JSX.Element => {
     return (
         <h1>Not Found</h1>
     )

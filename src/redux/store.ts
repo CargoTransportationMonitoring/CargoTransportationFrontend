@@ -9,5 +9,6 @@ const store = configureStore<RootReducer>({
     reducer: {
         error: errorReducer
     }
-})
+});
+
 export default store;

@@ -1,5 +1,7 @@
 import {v4 as uuidv4} from 'uuid';
 
+const ALGORITHM: string = 'SHA-256'
+
 export const generateRandomState = (): string => {
     return uuidv4();
 }
@@ -12,7 +14,7 @@ export const generateCodeVerifier = (): string => {
 
 export const generateCodeChallenge = async (codeVerifier: string): Promise<string> => {
     const codeVerifierByteArray: Uint8Array = new TextEncoder().encode(codeVerifier);
-    const digest: ArrayBuffer = await window.crypto.subtle.digest('SHA-256', codeVerifierByteArray);
+    const digest: ArrayBuffer = await window.crypto.subtle.digest(ALGORITHM, codeVerifierByteArray);
     return base64URLEncode(Array.from(new Uint8Array(digest)));
 }
 

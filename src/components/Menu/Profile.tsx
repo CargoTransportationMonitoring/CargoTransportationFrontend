@@ -1,6 +1,5 @@
-import React, {JSX, useEffect} from "react";
-import {getIdToken, getKeycloakInstance} from "../auth/KeycloakService";
-import Keycloak from "keycloak-js";
+import React, {JSX} from "react";
+import {getIdToken} from "../auth/KeycloakService";
 
 const Profile: React.FC = (): JSX.Element => {
 

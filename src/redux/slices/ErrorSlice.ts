@@ -4,14 +4,13 @@ interface ErrorType {
     error: string;
 }
 
-
 const initialState: string = ''
 
 const errorSlice: Slice<string> = createSlice({
     name: 'error',
     initialState,
     reducers: {
-        setError: (state: string, action: PayloadAction): void => {
+        setError: (_state: string, action: PayloadAction): void => {
             return action.payload
         },
         clearError: (): string => {

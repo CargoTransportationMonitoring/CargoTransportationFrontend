@@ -1,7 +1,7 @@
 import React, {JSX} from "react";
 import {NavLink} from "react-router-dom";
-import LogoutButton from "./LogoutButton";
 import Profile from "./Profile";
+import LogoutButton from "./LogoutButton";
 
 const Menu: React.FC = (): JSX.Element => {
     return (

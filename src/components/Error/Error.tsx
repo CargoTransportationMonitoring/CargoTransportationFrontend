@@ -1,3 +1,4 @@
+import {Dispatch} from "@reduxjs/toolkit";
 import React, {JSX, useEffect} from "react";
 import {toast, ToastContainer} from "react-toastify";
 import {useDispatch, useSelector} from "react-redux";
@@ -5,7 +6,7 @@ import {clearError, selectError} from "../../redux/slices/ErrorSlice";
 
 const Error: React.FC = (): JSX.Element => {
     const errorMessage: string = useSelector(selectError)
-    const dispatch = useDispatch()
+    const dispatch: Dispatch = useDispatch()
 
     useEffect((): void => {
         if (errorMessage) {

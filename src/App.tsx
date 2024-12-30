@@ -1,24 +1,31 @@
-import './App.css';
+import Keycloak from "keycloak-js";
 import React, {JSX, useEffect, useState} from "react";
 import {BrowserRouter, Outlet, Route, Routes} from "react-router-dom";
-import Error from "./components/Error/Error";
-import CarrierProfileTab from "./components/СargoСarrier/Tabs/CarrierProfileTab";
-import CarrierCargoTab from "./components/СargoСarrier/Tabs/CarrierCargoTab";
-import CarrierRouteTab from "./components/СargoСarrier/Tabs/CarrierRouteTab";
-import AdminProfileTab from "./components/Administrator/Tabs/AdminProfileTab";
-import AdminCargoTab from "./components/Administrator/Tabs/AdminCargoTab";
-import AdminRouteTab from "./components/Administrator/Tabs/AdminRouteTab";
-import NotFound from "./components/NotFound/NotFound";
-import {getKeycloakInstance, getToken, initKeycloak, isAuthenticated} from "./components/auth/KeycloakService";
+import './App.css';
 import Menu from "./components/Menu/Menu";
+import Error from "./components/Error/Error";
+import NotFound from "./components/NotFound/NotFound";
+import AdminRouteTab from "./components/Administrator/Tabs/AdminRouteTab";
+import AdminCargoTab from "./components/Administrator/Tabs/AdminCargoTab";
+import CarrierRouteTab from "./components/СargoСarrier/Tabs/CarrierRouteTab";
+import CarrierCargoTab from "./components/СargoСarrier/Tabs/CarrierCargoTab";
+import AdminProfileTab from "./components/Administrator/Tabs/AdminProfileTab";
+import CarrierProfileTab from "./components/СargoСarrier/Tabs/CarrierProfileTab";
 import {generateCodeChallenge, generateCodeVerifier, generateRandomState} from "./util/KeycloakUtils";
-import Keycloak from "keycloak-js";
-import {REACT_APP_KEYCLOAK_CLIENT_ID, REACT_APP_KEYCLOAK_REALM, REACT_APP_KEYCLOAK_URL} from "./util/Constants";
+import {getKeycloakInstance, getToken, initKeycloak, isAuthenticated} from "./components/auth/KeycloakService";
+import {
+    KEYCLOAK_CODE_CHALLENGE_METHOD,
+    KEYCLOAK_CLIENT_ID,
+    KEYCLOAK_REALM,
+    KEYCLOAK_URL,
+    KEYCLOAK_RESPONSE_TYPE,
+    KEYCLOAK_SCOPE
+} from "./util/Constants";
+import MainLayout from "./components/Menu/MainLayout";
 
 interface ProtectedRouteProps {
     requiredRoles: string[]
 }
-
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({requiredRoles}: ProtectedRouteProps): null | JSX.Element => {
     const keycloak: Keycloak = getKeycloakInstance()
@@ -30,14 +37,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({requiredRoles}: Protecte
             localStorage.setItem('pkce_state', state);
             localStorage.setItem('pkce_code_verifier', codeVerifier);
 
-            window.location.href = `${REACT_APP_KEYCLOAK_URL}/realms/${REACT_APP_KEYCLOAK_REALM}/protocol/openid-connect/auth` +
-                `?client_id=${REACT_APP_KEYCLOAK_CLIENT_ID}` +
+            window.location.href = `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/auth` +
+                `?client_id=${KEYCLOAK_CLIENT_ID}` +
                 `&redirect_uri=${window.location.origin}` +
-                `&response_type=code` +
-                `&scope=openid` +
+                `&response_type=${KEYCLOAK_RESPONSE_TYPE}` +
+                `&scope=${KEYCLOAK_SCOPE}` +
                 `&state=${state}` +
                 `&code_challenge=${codeChallenge}` +
-                `&code_challenge_method=S256`;
+                `&code_challenge_method=${KEYCLOAK_CODE_CHALLENGE_METHOD}`;
         });
 
         return null
@@ -55,16 +62,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({requiredRoles}: Protecte
 
 
     return (
-        <>
-            <Menu/>
-            <Outlet/>
-        </>
+        <MainLayout/>
     );
 };
 
 const App: React.FC = (): JSX.Element => {
 
-    const [keycloakInitialized, setKeycloakInitialized] = useState(false);
+    const [keycloakInitialized, setKeycloakInitialized] = useState<boolean>(false);
 
     useEffect((): void => {
         initKeycloak()

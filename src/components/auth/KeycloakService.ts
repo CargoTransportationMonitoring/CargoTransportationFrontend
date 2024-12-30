@@ -1,10 +1,10 @@
 import Keycloak from 'keycloak-js';
-import {REACT_APP_KEYCLOAK_CLIENT_ID, REACT_APP_KEYCLOAK_REALM, REACT_APP_KEYCLOAK_URL} from "../../util/Constants";
+import {KEYCLOAK_CLIENT_ID, KEYCLOAK_REALM, KEYCLOAK_URL} from "../../util/Constants";
 
 const keycloak: Keycloak = new Keycloak({
-    url: REACT_APP_KEYCLOAK_URL,
-    realm: REACT_APP_KEYCLOAK_REALM,
-    clientId: REACT_APP_KEYCLOAK_CLIENT_ID,
+    url: KEYCLOAK_URL,
+    realm: KEYCLOAK_REALM,
+    clientId: KEYCLOAK_CLIENT_ID,
 })
 
 export const initKeycloak = (): Promise<void> =>
