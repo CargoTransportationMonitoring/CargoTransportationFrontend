@@ -1,4 +1,12 @@
 import {v4 as uuidv4} from 'uuid';
+import {
+    KEYCLOAK_CLIENT_ID,
+    KEYCLOAK_CODE_CHALLENGE_METHOD,
+    KEYCLOAK_REALM,
+    KEYCLOAK_RESPONSE_TYPE,
+    KEYCLOAK_SCOPE,
+    KEYCLOAK_URL
+} from "./Constants";
 
 const ALGORITHM: string = 'SHA-256'
 
@@ -24,4 +32,46 @@ const base64URLEncode = (sourceValues: any): string => {
     return base64Encoded.replace(/\+/g, '-')
         .replace(/\//g, '_')
         .replace(/=/g, '')
+}
+
+export const parseJwt = (token: string): TokenId => {
+    const base64Url: string = token.split('.')[1];
+    const base64: string = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload: string = decodeURIComponent(
+        window
+            .atob(base64)
+            .split('')
+            .map((c: string): string => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+            .join('')
+    );
+
+    return JSON.parse(jsonPayload);
+}
+
+export interface TokenId {
+    given_name: string,
+    family_name: string,
+    sub: string,
+    email: string
+}
+
+
+export const authenticate = (): null => {
+    const state: string = generateRandomState()
+    const codeVerifier: string = generateCodeVerifier()
+    generateCodeChallenge(codeVerifier).then((codeChallenge: string): void => {
+        localStorage.setItem('pkce_state', state);
+        localStorage.setItem('pkce_code_verifier', codeVerifier);
+
+        window.location.href = `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/auth` +
+            `?client_id=${KEYCLOAK_CLIENT_ID}` +
+            `&redirect_uri=${window.location.origin}` +
+            `&response_type=${KEYCLOAK_RESPONSE_TYPE}` +
+            `&scope=${KEYCLOAK_SCOPE}` +
+            `&state=${state}` +
+            `&code_challenge=${codeChallenge}` +
+            `&code_challenge_method=${KEYCLOAK_CODE_CHALLENGE_METHOD}`;
+    });
+
+    return null
 }

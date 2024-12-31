@@ -1,10 +1,9 @@
 import React, {JSX} from "react";
+import Profile from "../../Menu/profile/Profile";
 
 const CarrierProfileTab: React.FC = (): JSX.Element => {
     return (
-        <div>
-            <h1>Admin Profile</h1>
-        </div>
+        <Profile/>
     )
 }
 
