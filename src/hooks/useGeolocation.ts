@@ -12,7 +12,7 @@ const useGeolocation = (): Geolocation => {
     });
 
     useEffect(() => {
-        const geo = navigator.geolocation;
+        const geo: globalThis.Geolocation = navigator.geolocation;
 
         function onSuccess(position: any): void {
             setPosition({
