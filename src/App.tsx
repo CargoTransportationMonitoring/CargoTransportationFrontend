@@ -4,7 +4,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './App.css';
 import Error from "./components/Error/Error";
 import NotFound from "./components/NotFound/NotFound";
-import AdminRouteTab from "./components/Administrator/Tabs/AdminRouteTab";
+import AdminRouteTab from "./components/Administrator/Tabs/route/AdminRouteTab";
 import AdminCargoTab from "./components/Administrator/Tabs/AdminCargoTab";
 import CarrierRouteTab from "./components/СargoСarrier/Tabs/CarrierRouteTab";
 import CarrierCargoTab from "./components/СargoСarrier/Tabs/CarrierCargoTab";
