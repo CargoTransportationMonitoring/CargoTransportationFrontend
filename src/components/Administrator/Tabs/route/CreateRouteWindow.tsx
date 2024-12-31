@@ -1,6 +1,7 @@
 import React, {JSX} from "react";
 import styles from './CreateRouteWindow.module.css'
-import Map from "../../../Map/Map";
+import Map from "../../../Map/MapComponent";
+import MapComponent from "../../../Map/MapComponent";
 
 const CreateRouteWindow: React.FC<{
     onCreate: () => void;
@@ -10,7 +11,7 @@ const CreateRouteWindow: React.FC<{
         <div className={styles.overlay}>
             <div className={styles.modal}>
                 <h2>Создать маршрут</h2>
-                <Map/>
+                <MapComponent/>
                 <p>Вы уверены, что хотите создать маршрут?</p>
                 <div className={styles.buttons}>
                     <button onClick={onCreate} className={styles.button}>Create</button>
