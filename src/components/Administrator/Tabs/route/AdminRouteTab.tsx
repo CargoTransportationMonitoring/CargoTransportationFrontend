@@ -11,12 +11,7 @@ const AdminRouteTab: React.FC = (): JSX.Element => {
 
     const closeModal = (): void => {
         setModalOpen(false);
-    };
-
-    const createRoute = (): void => {
-        console.log("Route created!");
-        closeModal();
-    };
+    }
 
     return (
         <>
@@ -26,7 +21,6 @@ const AdminRouteTab: React.FC = (): JSX.Element => {
 
             {isModalOpen && (
                 <CreateRouteWindow
-                    onCreate={createRoute}
                     onCancel={closeModal}
                 />
             )}
