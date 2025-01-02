@@ -60,22 +60,22 @@ label {
 }
 
 .custom-marker {
-  background-color: #4285F4 !important; /* Синий фон */
-  border-radius: 50% !important; /* Делает маркер круглым */
-  width: 30px !important;
-  height: 30px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important; /* Тень */
-  border: 2px solid white !important; /* Белая граница */
-  color: white !important; /* Белый текст */
-  font-weight: bold !important;
-  font-size: 14px !important;
-  text-align: center !important;
+  background-color: #4285F4 ; /* Синий фон */
+  border-radius: 50% ; /* Делает маркер круглым */
+  width: 30px ;
+  height: 30px ;
+  display: flex ;
+  align-items: center ;
+  justify-content: center ;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) ; /* Тень */
+  border: 2px solid white ; /* Белая граница */
+  color: white ; /* Белый текст */
+  font-weight: bold ;
+  font-size: 14px ;
+  text-align: center ;
 }
 
 .marker-content {
-  line-height: 30px !important; /* Центрирование текста */
-  pointer-events: none !important; /* Убирает взаимодействие с текстом */
+  line-height: 30px ; /* Центрирование текста */
+  pointer-events: none ; /* Убирает взаимодействие с текстом */
 }
