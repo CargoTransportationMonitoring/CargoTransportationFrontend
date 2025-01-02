@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 
 export interface Geolocation {
     latitude: number,
-    longitude: number
+    longitude: number,
+    isVisited?: boolean
 }
 
 const useGeolocation = (): Geolocation => {

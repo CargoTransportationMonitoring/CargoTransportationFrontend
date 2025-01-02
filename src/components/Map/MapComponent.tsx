@@ -21,8 +21,9 @@ const MapComponent: React.FC<{
             const pointKey: string = `${markerData.latitude.toFixed(6)},${markerData.longitude.toFixed(6)}`;
             const marker: leaflet.Marker | undefined = markersMap.get(pointKey);
             if (marker) {
+                const visitedClass: "visited" | "not-visited" = markerData.isVisited ? "visited" : "not-visited"; // Определяем цвет фона
                 const customIcon: leaflet.DivIcon = leaflet.divIcon({
-                    className: "custom-marker",
+                    className: `custom-marker ${visitedClass}`,
                     html: `<div class="marker-content">${index + 1}</div>`,
                     iconSize: [30, 30],
                     iconAnchor: [15, 15],
@@ -32,7 +33,8 @@ const MapComponent: React.FC<{
         });
     };
 
-    const addMarker = (latitude: number, longitude: number, index?: number): void => {
+
+    const addMarker = (latitude: number, longitude: number, index?: number, isVisited: boolean = false): void => {
         const pointKey: string = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
 
         if (!markersMap.has(pointKey)) {
@@ -62,7 +64,7 @@ const MapComponent: React.FC<{
             });
 
             const [lat, long] = pointKey.split(",");
-            markersArray.push({latitude: Number(lat), longitude: Number(long)});
+            markersArray.push({latitude: Number(lat), longitude: Number(long), isVisited: isVisited});
             markersMap.set(pointKey, marker);
             updateMarkersText();
         }
@@ -77,8 +79,8 @@ const MapComponent: React.FC<{
                 }
             }).then((response: AxiosResponse): void => {
                 const {coordinates} = response.data;
-                coordinates.forEach(({latitude, longitude}: Geolocation): void => {
-                    addMarker(latitude, longitude);
+                coordinates.forEach(({latitude, longitude, isVisited}: Geolocation): void => {
+                    addMarker(latitude, longitude, undefined, isVisited === undefined ? false : isVisited);
                 });
             }).catch((error): void => {
                 console.log(error)

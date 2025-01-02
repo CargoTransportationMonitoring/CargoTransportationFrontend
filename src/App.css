@@ -79,3 +79,11 @@ label {
   line-height: 30px ; /* Центрирование текста */
   pointer-events: none ; /* Убирает взаимодействие с текстом */
 }
+
+.custom-marker.visited .marker-content {
+  background-color: green;
+}
+
+.custom-marker.not-visited .marker-content {
+  background-color: red;
+}
