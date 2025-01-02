@@ -15,6 +15,19 @@ const MapComponent: React.FC<{
     const [nearbyMarkers, setNearbyMarkers] = useState<Geolocation[]>([]);
     const markersMap: Map<string, leaflet.Marker> = new Map<string, leaflet.Marker>()
 
+    const updateMarkersText = (): void => {
+        markersArray.forEach((markerData: Geolocation, index: number): void => {
+            const pointKey: string = `${markerData.latitude.toFixed(6)},${markerData.longitude.toFixed(6)}`;
+            const marker: leaflet.Marker | undefined = markersMap.get(pointKey);
+            if (marker) {
+                marker.bindTooltip(
+                    `Index: ${index + 1}`,
+                    {permanent: true, direction: "top"}
+                );
+            }
+        });
+    };
+
     const addMarker = (latitude: number, longitude: number): void => {
         const pointKey: string = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
 
@@ -22,25 +35,23 @@ const MapComponent: React.FC<{
             const marker: leaflet.Marker = leaflet
                 .marker([latitude, longitude])
                 .addTo(mapRef.current)
-                .bindPopup(
-                    `lat: ${latitude.toFixed(2)}, long: ${longitude.toFixed(2)}`
-                );
 
-            marker.on("click", (): void => {
+            marker.on("dblclick", (): void => {
                 marker.remove();
                 markersMap.delete(pointKey);
-                setNearbyMarkers((prevMarkers: Geolocation[]) =>
-                    prevMarkers.filter(
-                        (m: Geolocation) =>
-                            m.latitude.toFixed(6) !== latitude.toFixed(6) ||
-                            m.longitude.toFixed(6) !== longitude.toFixed(6)
-                    )
+                const updatedMarkers: Geolocation[] = markersArray.filter(
+                    (m: Geolocation) =>
+                        m.latitude.toFixed(6) !== latitude.toFixed(6) ||
+                        m.longitude.toFixed(6) !== longitude.toFixed(6)
                 );
+                markersArray.splice(0, markersArray.length, ...updatedMarkers); // Обновляем массив
+                updateMarkersText();
             });
 
             const [lat, long] = pointKey.split(',')
             markersArray.push({latitude: Number(lat), longitude: Number(long)})
             markersMap.set(pointKey, marker);
+            updateMarkersText();
         }
     }
 
