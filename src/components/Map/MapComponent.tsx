@@ -5,6 +5,7 @@ import CitySearch from "./CitySearch";
 import axios, {AxiosResponse} from "axios";
 import {API_V1_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../util/Constants";
 import {getToken} from "../auth/KeycloakService";
+import "../../App.css";
 
 const MapComponent: React.FC<{
     markersArray: Array<Geolocation>
@@ -20,23 +21,35 @@ const MapComponent: React.FC<{
             const pointKey: string = `${markerData.latitude.toFixed(6)},${markerData.longitude.toFixed(6)}`;
             const marker: leaflet.Marker | undefined = markersMap.get(pointKey);
             if (marker) {
-                marker.bindTooltip(
-                    `Index: ${index + 1}`,
-                    {permanent: true, direction: "top"}
-                );
+                const customIcon: leaflet.DivIcon = leaflet.divIcon({
+                    className: "custom-marker",
+                    html: `<div class="marker-content">${index + 1}</div>`,
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15],
+                });
+                marker.setIcon(customIcon);
             }
         });
     };
 
-    const addMarker = (latitude: number, longitude: number): void => {
+    const addMarker = (latitude: number, longitude: number, index?: number): void => {
         const pointKey: string = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
 
         if (!markersMap.has(pointKey)) {
-            const marker: leaflet.Marker = leaflet
-                .marker([latitude, longitude])
-                .addTo(mapRef.current)
+            const markerIndex: number = index !== undefined ? index + 1 : markersArray.length + 1;
 
-            marker.on("dblclick", (): void => {
+            const customIcon: leaflet.DivIcon = leaflet.divIcon({
+                className: "custom-marker",
+                html: `<div class="marker-content">${markerIndex}</div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15],
+            });
+
+            const marker: leaflet.Marker = leaflet
+                .marker([latitude, longitude], {icon: customIcon})
+                .addTo(mapRef.current);
+
+            marker.on("click", (): void => {
                 marker.remove();
                 markersMap.delete(pointKey);
                 const updatedMarkers: Geolocation[] = markersArray.filter(
@@ -48,12 +61,12 @@ const MapComponent: React.FC<{
                 updateMarkersText();
             });
 
-            const [lat, long] = pointKey.split(',')
-            markersArray.push({latitude: Number(lat), longitude: Number(long)})
+            const [lat, long] = pointKey.split(",");
+            markersArray.push({latitude: Number(lat), longitude: Number(long)});
             markersMap.set(pointKey, marker);
             updateMarkersText();
         }
-    }
+    };
 
     useEffect(() => {
         if (routeId) {
