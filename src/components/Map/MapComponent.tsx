@@ -2,10 +2,14 @@ import React, {JSX, useEffect, useRef, useState} from "react";
 import leaflet from "leaflet";
 import {Geolocation} from "../../hooks/useGeolocation";
 import CitySearch from "./CitySearch";
+import axios, {AxiosResponse} from "axios";
+import {API_V1_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../util/Constants";
+import {getToken} from "../auth/KeycloakService";
 
 const MapComponent: React.FC<{
     markersArray: Array<Geolocation>
-}> = ({markersArray}): JSX.Element => {
+    routeId: string | null
+}> = ({markersArray, routeId}): JSX.Element => {
     const mapRef: any = useRef();
 
     const [nearbyMarkers, setNearbyMarkers] = useState<Geolocation[]>([]);
@@ -41,6 +45,21 @@ const MapComponent: React.FC<{
     }
 
     useEffect(() => {
+        if (routeId) {
+            axios.get(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/${routeId}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                }
+            }).then((response: AxiosResponse): void => {
+                const {coordinates} = response.data;
+                coordinates.forEach(({latitude, longitude}: Geolocation): void => {
+                    addMarker(latitude, longitude);
+                });
+            }).catch((error): void => {
+                console.log(error)
+            })
+        }
         mapRef.current = leaflet
             .map("map")
             .setView([0, 0], 1);

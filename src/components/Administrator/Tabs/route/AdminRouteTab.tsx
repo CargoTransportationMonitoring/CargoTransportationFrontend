@@ -1,9 +1,11 @@
 import React, {JSX, useState} from "react";
-import CreateRouteWindow from "./CreateRouteWindow";
+import RouteWindow from "./RouteWindow";
+import RouteList from "./RouteList";
 
 const AdminRouteTab: React.FC = (): JSX.Element => {
 
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
+    const [activeRouteId, setActiveRouteId] = useState<string | null>(null);
 
     const openModal = (): void => {
         setModalOpen(true);
@@ -13,15 +15,24 @@ const AdminRouteTab: React.FC = (): JSX.Element => {
         setModalOpen(false);
     }
 
+    const handleViewRouteClick = (routeId: string): void => {
+        setActiveRouteId(routeId)
+        openModal()
+    }
+
+    const handleCreateClick = (): void => {
+        setActiveRouteId(null)
+        openModal()
+    }
+
     return (
         <>
-            <h1>Маршруты</h1>
-            <p>Здесь будет информация о маршрутах</p>
-            <button onClick={openModal}>Create Route</button>
-
+            <RouteList handleClick={handleViewRouteClick}/>
+            <button onClick={handleCreateClick}>Create Route</button>
             {isModalOpen && (
-                <CreateRouteWindow
+                <RouteWindow
                     onCancel={closeModal}
+                    routeId={activeRouteId}
                 />
             )}
         </>

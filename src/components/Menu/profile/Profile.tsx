@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {JSX, useState} from "react";
 import {authenticate, parseJwt, TokenId} from "../../../util/KeycloakUtils";
 import {getIdToken, getToken} from "../../auth/KeycloakService";
-import {API_V1_USER_PREFIX, SERVER_URI} from "../../../util/Constants";
+import {API_V1_USER_PREFIX, SERVER_CORE_URI} from "../../../util/Constants";
 
 const Profile: React.FC = (): JSX.Element => {
 
@@ -14,7 +14,7 @@ const Profile: React.FC = (): JSX.Element => {
     const toggleEditMode = (): void => {
         if (isEditing) {
             axios.put(
-                `${SERVER_URI}/${API_V1_USER_PREFIX}/${tokenData.sub}`,
+                `${SERVER_CORE_URI}/${API_V1_USER_PREFIX}/${tokenData.sub}`,
                 {
                     userId: tokenData.sub,
                     name: firstName,
@@ -38,7 +38,7 @@ const Profile: React.FC = (): JSX.Element => {
     };
 
     const deleteProfile = (): void => {
-        axios.delete(`${SERVER_URI}/${API_V1_USER_PREFIX}/${tokenData.sub}`,
+        axios.delete(`${SERVER_CORE_URI}/${API_V1_USER_PREFIX}/${tokenData.sub}`,
             {
                 headers: {
                     Authorization: `Bearer ${getToken()}`,
