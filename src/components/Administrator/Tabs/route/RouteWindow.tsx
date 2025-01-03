@@ -25,7 +25,7 @@ const RouteWindow: React.FC<{
 
     const handleCreate = (): void => {
         if (markersArray.length === 0) {
-            setError('Отметьте хотя бы одну точку на карте');
+            dispatch(setError('Отметьте хотя бы одну точку на карте'));
             return;
         }
 
@@ -54,15 +54,14 @@ const RouteWindow: React.FC<{
             .catch((error): void => {
                 if (error.response) {
                     if (error.response.status === 400) {
-                        setError('Ошибка валидации данных');
+                        dispatch(setError('Ошибка валидации данных'));
                     } else if (error.response.status === 403) {
-                        setError('Недостаточно прав для выполнения операции');
+                        dispatch(setError('Недостаточно прав для выполнения операции'));
                     } else {
-                        setError('Неизвестная ошибка');
+                        dispatch(setError('Неизвестная ошибка'));
                     }
                 } else {
-                    console.error('Ошибка сети или сервера:', error.message);
-                    setError('Ошибка сети, попробуйте снова');
+                    dispatch(setError('Ошибка сети, попробуйте снова'));
                 }
             })
             .finally((): void => {
@@ -91,7 +90,30 @@ const RouteWindow: React.FC<{
     }
 
     const handleUpdate = (): void => {
-        console.log('updated')
+        if (markersArray.length === 0) {
+            dispatch(setError('Отметьте хотя бы одну точку на карте'));
+            return;
+        }
+
+        const requestBody: routeType = {
+            coordinates: markersArray.map((marker: Geolocation): Geolocation => ({
+                latitude: marker.latitude,
+                longitude: marker.longitude,
+            })),
+        };
+
+        axios.put(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/${routeId}`, requestBody, {
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+                'Content-Type': 'application/json',
+            }
+        }).then((response: AxiosResponse): void => {
+            console.log(response)
+        }).catch((error): void => {
+            dispatch(setError(`Ошибка обновления маршрута: ${error}`))
+        }).finally((): void => {
+            onCancel();
+        });
     }
 
     return (

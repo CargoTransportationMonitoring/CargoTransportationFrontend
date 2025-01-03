@@ -1,6 +1,9 @@
 import React, {JSX, useEffect, useState} from "react";
 import axios, {AxiosResponse} from "axios";
 import styles from "./CitySearch.module.css";
+import {useDispatch} from "react-redux";
+import {Dispatch} from "@reduxjs/toolkit";
+import {setError} from "../../redux/slices/ErrorSlice";
 
 interface CitySearchProps {
     handleCitySelectForMap: (city: any) => void;
@@ -14,6 +17,7 @@ const CitySearch: React.FC<CitySearchProps> = ({handleCitySelectForMap}: CitySea
     const [debouncedCityQuery, setDebouncedCityQuery] = useState<string>(cityQuery);
     const [selectedCity, setSelectedCity] = useState<any | null>(null);
     const [isDropdownVisible, setDropdownVisible] = useState<boolean>(false);
+    const dispatch: Dispatch = useDispatch();
 
     // API для поиска города
     const fetchCities = async (query: string): Promise<void> => {
@@ -33,7 +37,7 @@ const CitySearch: React.FC<CitySearchProps> = ({handleCitySelectForMap}: CitySea
             });
             setCityResults(response.data);
         } catch (error) {
-            console.error("Error fetching cities:", error);
+            dispatch(setError(`Error fetching cities: ${error}`));
         }
     };
 
