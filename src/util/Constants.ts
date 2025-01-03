@@ -9,8 +9,8 @@ export const KEYCLOAK_CODE_CHALLENGE_METHOD: string = 'S256';
 export const CLIENT_ROOT_URI: string = 'http://localhost:3000/main'
 
 
-export const SERVER_ADMIN_URI: string = 'http://localhost:8081/test/admin'
-export const SERVER_USER_URI: string = 'http://localhost:8081/test/user'
-export const SERVER_URI: string = 'http://localhost:8081'
-
+export const SERVER_CORE_URI: string = 'http://localhost:8081'
 export const API_V1_USER_PREFIX: string = 'api/v1/user'
+
+export const SERVER_ROUTE_URI: string = 'http://localhost:8082'
+export const API_V1_ROUTE_PREFIX: string = 'api/v1/routes'

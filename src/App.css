@@ -58,3 +58,32 @@ label {
 .courseLink:hover {
   text-decoration: underline;
 }
+
+.custom-marker {
+  background-color: #4285F4 ; /* Синий фон */
+  border-radius: 50% ; /* Делает маркер круглым */
+  width: 30px ;
+  height: 30px ;
+  display: flex ;
+  align-items: center ;
+  justify-content: center ;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) ; /* Тень */
+  border: 2px solid white ; /* Белая граница */
+  color: white ; /* Белый текст */
+  font-weight: bold ;
+  font-size: 14px ;
+  text-align: center ;
+}
+
+.marker-content {
+  line-height: 30px ; /* Центрирование текста */
+  pointer-events: none ; /* Убирает взаимодействие с текстом */
+}
+
+.custom-marker.visited .marker-content {
+  background-color: green;
+}
+
+.custom-marker.not-visited .marker-content {
+  background-color: red;
+}
