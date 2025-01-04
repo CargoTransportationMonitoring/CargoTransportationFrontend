@@ -1,15 +1,30 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import React, {JSX, useState} from "react";
 import {authenticate, parseJwt, TokenId} from "../../../util/KeycloakUtils";
 import {getIdToken, getToken} from "../../auth/KeycloakService";
 import {API_V1_USER_PREFIX, SERVER_CORE_URI} from "../../../util/Constants";
+import UserLinkWindow from "./UserLinkWindow";
+import {Dispatch} from "@reduxjs/toolkit";
+import {useDispatch} from "react-redux";
+import {setError} from "../../../redux/slices/ErrorSlice";
 
-const Profile: React.FC = (): JSX.Element => {
+const UserProfile: React.FC = (): JSX.Element => {
 
     const tokenData: TokenId = parseJwt(getIdToken());
+    const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [firstName, setFirstName] = useState<string>(tokenData.given_name);
     const [lastName, setLastName] = useState<string>(tokenData.family_name);
+    const [isAdminPresent, setIsAdminPresent] = useState<boolean>(!!localStorage.getItem("adminUsername"))
+    const dispatch: Dispatch = useDispatch()
+
+    const openModal = (): void => {
+        setModalOpen(true);
+    };
+
+    const closeModal = (): void => {
+        setModalOpen(false);
+    }
 
     const toggleEditMode = (): void => {
         if (isEditing) {
@@ -54,8 +69,36 @@ const Profile: React.FC = (): JSX.Element => {
             });
     }
 
+    const handleUnlink = (): void => {
+        axios.put(`${SERVER_CORE_URI}/${API_V1_USER_PREFIX}/unlink/${tokenData.sub}`, {}, {
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+                "Content-Type": "application/json"
+            }
+        }).then((response: AxiosResponse): void => {
+            console.log("Unlinked successfully")
+            localStorage.removeItem("adminUsername")
+            setIsAdminPresent(false)
+        }).catch((error): void => {
+            dispatch(setError(error))
+        })
+    }
+
     return (
         <div>
+            <div>
+                {isAdminPresent
+                    ? <>
+                        <h2>Your Administrator username: {localStorage.getItem("adminUsername")}</h2>
+                        <button onClick={handleUnlink}>Открепиться от администратора</button>
+                    </>
+                    : <>
+                        <h2>You are not attachment to any Administrator</h2>
+                        <button onClick={openModal}>Прилинковаться к администратору</button>
+                    </>
+                }
+            </div>
+
             <h2>Email: {tokenData.email}</h2>
             <div>
                 <label>First name:</label>
@@ -84,10 +127,15 @@ const Profile: React.FC = (): JSX.Element => {
             <button onClick={toggleEditMode}>
                 {isEditing ? "Сохранить" : "Редактировать"}
             </button>
-
             <button onClick={deleteProfile}>Удалить профиль</button>
+            {isModalOpen && (
+                <UserLinkWindow
+                    onCancel={closeModal}
+                    updateAdmin={setIsAdminPresent}
+                />
+            )}
         </div>
     );
 }
 
-export default Profile;
+export default UserProfile;

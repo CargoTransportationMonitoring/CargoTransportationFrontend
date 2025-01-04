@@ -6,6 +6,7 @@ import {getToken} from "../../../auth/KeycloakService";
 import {useDispatch, useSelector} from "react-redux";
 import {addRoute, RouteType, selectRoutes} from "../../../../redux/slices/RouteSlice";
 import {Dispatch} from "@reduxjs/toolkit";
+import {setError} from "../../../../redux/slices/ErrorSlice";
 
 const RouteList: React.FC<{
     handleClick: (routeId: string) => void
@@ -29,7 +30,7 @@ const RouteList: React.FC<{
                 }))
             });
         }).catch((error): void => {
-            console.log(error)
+            dispatch(setError(error))
         })
     }, [])
 

@@ -52,7 +52,8 @@ export interface TokenId {
     given_name: string,
     family_name: string,
     sub: string,
-    email: string
+    email: string,
+    adminUsername: string | undefined
 }
 
 

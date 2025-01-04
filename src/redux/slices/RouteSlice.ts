@@ -12,7 +12,12 @@ export const routesSlice: Slice<RouteType[]> = createSlice({
     initialState,
     reducers: {
         addRoute: (state: RouteType[], action: PayloadAction<RouteType>): RouteType[] => {
-            return [...state, action.payload]
+            const isUnique: boolean = state.find((route: RouteType): boolean => route.routeId === action.payload.routeId) === undefined
+            if (isUnique)
+                return [...state, action.payload]
+            else {
+                return state
+            }
         },
         removeRoute: (state: RouteType[], action: PayloadAction<RouteType>): RouteType[] => {
             return state.filter((route: RouteType): boolean => route.routeId !== action.payload.routeId)

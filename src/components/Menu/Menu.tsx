@@ -8,6 +8,7 @@ const Menu: React.FC = (): JSX.Element => {
             <NavLink to='profile' end>Profile</NavLink>
             <NavLink to='cargos'>Cargos</NavLink>
             <NavLink to='routes'>Routes</NavLink>
+            <NavLink to='users'>Users</NavLink>
             <LogoutButton/>
         </nav>
     )
