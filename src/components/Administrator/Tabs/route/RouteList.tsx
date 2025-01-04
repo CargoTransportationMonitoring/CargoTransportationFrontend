@@ -2,11 +2,12 @@ import React, {JSX, useEffect} from "react";
 import RouteItem from "./RouteItem";
 import axios, {AxiosResponse} from "axios";
 import {API_V1_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../../../util/Constants";
-import {getToken} from "../../../auth/KeycloakService";
+import {getIdToken, getToken} from "../../../auth/KeycloakService";
 import {useDispatch, useSelector} from "react-redux";
 import {addRoute, RouteType, selectRoutes} from "../../../../redux/slices/RouteSlice";
 import {Dispatch} from "@reduxjs/toolkit";
 import {setError} from "../../../../redux/slices/ErrorSlice";
+import {isAdmin, parseJwt} from "../../../../util/KeycloakUtils";
 
 const RouteList: React.FC<{
     handleClick: (routeId: string) => void
@@ -17,7 +18,12 @@ const RouteList: React.FC<{
 
 
     useEffect((): void => {
-        axios.get(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}`, {
+
+        const serverUri: string = isAdmin()
+            ? `${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}`
+            : `${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/user/${parseJwt(getToken()).sub}`
+
+        axios.get(serverUri, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${getToken()}`

@@ -1,4 +1,3 @@
-import Keycloak from "keycloak-js";
 import React, {JSX, useEffect, useState} from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './App.css';
@@ -6,11 +5,11 @@ import Error from "./components/Error/Error";
 import NotFound from "./components/NotFound/NotFound";
 import AdminRouteTab from "./components/Administrator/Tabs/route/AdminRouteTab";
 import AdminCargoTab from "./components/Administrator/Tabs/AdminCargoTab";
-import CarrierRouteTab from "./components/СargoСarrier/Tabs/CarrierRouteTab";
+import CarrierRouteTab from "./components/СargoСarrier/Tabs/route/CarrierRouteTab";
 import CarrierCargoTab from "./components/СargoСarrier/Tabs/CarrierCargoTab";
 import AdminProfileTab from "./components/Administrator/Tabs/AdminProfileTab";
 import CarrierProfileTab from "./components/СargoСarrier/Tabs/CarrierProfileTab";
-import {authenticate} from "./util/KeycloakUtils";
+import {authenticate, getRole} from "./util/KeycloakUtils";
 import {
     getIdToken,
     getKeycloakInstance,
@@ -26,14 +25,12 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({requiredRoles}: ProtectedRouteProps): null | JSX.Element => {
-    const keycloak: Keycloak = getKeycloakInstance()
-
     if (!isAuthenticated()) {
         authenticate()
     }
 
     if (requiredRoles && requiredRoles.length > 0) {
-        const userRoles: string[] = keycloak.resourceAccess['cargotransportation-client'].roles;
+        const userRoles: string[] = getRole();
         const hasAtLeastOneRole: boolean = requiredRoles.some((role: string) => userRoles.includes(role));
         console.log('userRoles: ', userRoles)
         console.log(getToken())

@@ -1,27 +1,35 @@
-import React, {JSX} from "react";
+import React, {JSX, useEffect, useState} from "react";
 import styles from './CreateRouteWindow.module.css'
-import MapComponent from "../../../Map/MapComponent";
-import {setError} from "../../../../redux/slices/ErrorSlice";
+import MapComponent from "../../../../Map/MapComponent";
+import {setError} from "../../../../../redux/slices/ErrorSlice";
 import axios, {AxiosResponse} from "axios";
-import {Geolocation} from "../../../../hooks/useGeolocation";
-import {getToken} from "../../../auth/KeycloakService";
-import {API_V1_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../../../util/Constants";
+import {Geolocation} from "../../../../../hooks/useGeolocation";
+import {getToken} from "../../../../auth/KeycloakService";
+import {API_V1_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../../../../util/Constants";
 import {useDispatch} from "react-redux";
 import {Dispatch} from "@reduxjs/toolkit";
-import {addRoute, removeRoute} from "../../../../redux/slices/RouteSlice";
+import {addRoute, removeRoute} from "../../../../../redux/slices/RouteSlice";
+import RouteForm from "./RouteForm";
+import {isAdmin} from "../../../../../util/KeycloakUtils";
 
 
 type routeType = {
+    name: string,
+    description: string,
+    assignedUsername: string,
     coordinates: Geolocation[]
 }
 
 const RouteWindow: React.FC<{
-    onCancel: () => void
+    onCancel: () => void,
     routeId: string | null
 }> = ({onCancel, routeId}): JSX.Element => {
 
-    const markersArray: Array<Geolocation> = new Array<Geolocation>();
+    const [markersArray, setMarkersArray] = useState<Geolocation[]>([])
     const dispatch: Dispatch = useDispatch()
+    const [routeName, setRouteName] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [assignedUser, setAssignedUser] = useState<string>('');
 
     const handleCreate = (): void => {
         if (markersArray.length === 0) {
@@ -36,6 +44,9 @@ const RouteWindow: React.FC<{
                 latitude: marker.latitude,
                 longitude: marker.longitude,
             })),
+            name: routeName,
+            description: description,
+            assignedUsername: assignedUser
         };
 
         axios
@@ -94,13 +105,18 @@ const RouteWindow: React.FC<{
             dispatch(setError('Отметьте хотя бы одну точку на карте'));
             return;
         }
+        markersArray.forEach((marker: Geolocation) => console.log(marker))
 
         const requestBody: routeType = {
             coordinates: markersArray.map((marker: Geolocation): Geolocation => ({
                 latitude: marker.latitude,
                 longitude: marker.longitude,
             })),
+            name: routeName,
+            description: description,
+            assignedUsername: assignedUser
         };
+
 
         axios.put(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/${routeId}`, requestBody, {
             headers: {
@@ -116,20 +132,55 @@ const RouteWindow: React.FC<{
         });
     }
 
+    const handleUpdatePoints = (): void => {
+        console.log('update points')
+    }
+
+    useEffect((): void => {
+        if (routeId) {
+            axios.get(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/${routeId}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                }
+            }).then((response: AxiosResponse): void => {
+                setMarkersArray(response.data.coordinates);
+                setRouteName(response.data.name);
+                setDescription(response.data.description);
+                setAssignedUser(response.data.assignedUsername);
+            }).catch((error): void => {
+                dispatch(setError(error))
+            })
+        }
+    }, [])
+
     return (
         <div className={styles.overlay}>
             <div className={styles.modal}>
-                <h2>Создать маршрут</h2>
+                {!!routeId ? <h2>Просмотр и редактирование маршрута</h2> : <h2>Создание маршрута</h2>}
+                <RouteForm
+                    routeName={routeName}
+                    description={description}
+                    assignedUser={assignedUser}
+                    setRouteName={setRouteName}
+                    setDescription={setDescription}
+                    setAssignedUser={setAssignedUser}
+                />
                 <MapComponent markersArray={markersArray} routeId={routeId}/>
-                <p>Вы уверены, что хотите создать маршрут?</p>
+                {!routeId && <p>Вы уверены, что хотите создать маршрут?</p>}
                 <div className={styles.buttons}>
-                    {routeId ?
+                    {routeId && isAdmin() ? (
                         <>
                             <button onClick={handleUpdate} className={styles.button}>Update</button>
                             <button onClick={handleDelete} className={styles.button}>Delete</button>
                         </>
-                        : <button onClick={handleCreate} className={styles.button}>Create</button>
-                    }
+                    ) : (
+                        isAdmin() ? (
+                            <button onClick={handleCreate} className={styles.button}>Create</button>
+                        ) : (
+                            <button onClick={handleUpdatePoints} className={styles.button}>Update points</button>
+                        )
+                    )}
                     <button onClick={onCancel} className={styles.button}>Cancel</button>
                 </div>
             </div>

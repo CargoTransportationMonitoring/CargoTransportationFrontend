@@ -6,6 +6,7 @@ import axios, {AxiosResponse} from "axios";
 import {API_V1_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../util/Constants";
 import {getToken} from "../auth/KeycloakService";
 import "../../App.css";
+import {isAdmin} from "../../util/KeycloakUtils";
 
 const MapComponent: React.FC<{
     markersArray: Array<Geolocation>
@@ -51,7 +52,7 @@ const MapComponent: React.FC<{
                 .marker([latitude, longitude], {icon: customIcon})
                 .addTo(mapRef.current);
 
-            marker.on("click", (): void => {
+            isAdmin() ? marker.on("click", (): void => {
                 marker.remove();
                 markersMap.delete(pointKey);
                 const updatedMarkers: Geolocation[] = markersArray.filter(
@@ -61,7 +62,9 @@ const MapComponent: React.FC<{
                 );
                 markersArray.splice(0, markersArray.length, ...updatedMarkers); // Обновляем массив
                 updateMarkersText();
-            });
+            }) : marker.on("click", (): void => {
+                console.log('user clicked on marker')
+            })
 
             const [lat, long] = pointKey.split(",");
             markersArray.push({latitude: Number(lat), longitude: Number(long), isVisited: isVisited});
@@ -102,7 +105,7 @@ const MapComponent: React.FC<{
             addMarker(latitude, longitude);
         });
 
-        mapRef.current.on("click", (e: leaflet.LeafletMouseEvent): void => {
+        isAdmin() && mapRef.current.on("click", (e: leaflet.LeafletMouseEvent): void => {
             addMarker(e.latlng.lat, e.latlng.lng);
         });
 
@@ -114,9 +117,9 @@ const MapComponent: React.FC<{
 
     return (
         <>
-            <CitySearch handleCitySelectForMap={(city: any): void => {
+            {isAdmin() && <CitySearch handleCitySelectForMap={(city: any): void => {
                 addMarker(Number(city.lat), Number(city.lon));
-            }}/>
+            }}/>}
             <div id="map" ref={mapRef}></div>
         </>
     )

@@ -1,5 +1,5 @@
 import React, {JSX, useState} from "react";
-import styles from "../../Administrator/Tabs/route/CreateRouteWindow.module.css";
+import styles from "../../Administrator/Tabs/route/window/CreateRouteWindow.module.css";
 import axios, {AxiosResponse} from "axios";
 import {API_V1_USER_PREFIX, SERVER_CORE_URI} from "../../../util/Constants";
 import {getToken} from "../../auth/KeycloakService";

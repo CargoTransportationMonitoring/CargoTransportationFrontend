@@ -7,8 +7,12 @@ import {
     KEYCLOAK_SCOPE,
     KEYCLOAK_URL
 } from "./Constants";
+import Keycloak from "keycloak-js";
+import {getKeycloakInstance} from "../components/auth/KeycloakService";
 
 const ALGORITHM: string = 'SHA-256'
+
+const keycloak: Keycloak = getKeycloakInstance()
 
 export const generateRandomState = (): string => {
     return uuidv4();
@@ -75,4 +79,13 @@ export const authenticate = (): null => {
     });
 
     return null
+}
+
+export const getRole = (): string[] => {
+    return keycloak.resourceAccess['cargotransportation-client'].roles
+}
+
+
+export const isAdmin = (): boolean => {
+    return getRole().find((role: string): boolean => role === 'admin') !== undefined
 }
