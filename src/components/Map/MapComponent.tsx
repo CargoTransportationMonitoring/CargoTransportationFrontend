@@ -1,46 +1,27 @@
-import React, {JSX, useEffect, useRef, useState} from "react";
+import React, {JSX, useEffect, useRef} from "react";
 import leaflet from "leaflet";
 import {Geolocation} from "../../hooks/useGeolocation";
 import CitySearch from "./CitySearch";
-import axios, {AxiosResponse} from "axios";
-import {API_V1_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../util/Constants";
-import {getToken} from "../auth/KeycloakService";
 import "../../App.css";
 import {isAdmin} from "../../util/KeycloakUtils";
 
 const MapComponent: React.FC<{
-    markersArray: Array<Geolocation>
-    routeId: string | null
-}> = ({markersArray, routeId}): JSX.Element => {
-    const mapRef: any = useRef();
-    const markersMap: Map<string, leaflet.Marker> = new Map<string, leaflet.Marker>()
-
-    const updateMarkersText = (): void => {
-        markersArray.forEach((markerData: Geolocation, index: number): void => {
-            const pointKey: string = `${markerData.latitude.toFixed(6)},${markerData.longitude.toFixed(6)}`;
-            const marker: leaflet.Marker | undefined = markersMap.get(pointKey);
-            if (marker) {
-                const visitedClass: "visited" | "not-visited" = markerData.isVisited ? "visited" : "not-visited"; // Определяем цвет фона
-                const customIcon: leaflet.DivIcon = leaflet.divIcon({
-                    className: `custom-marker ${visitedClass}`,
-                    html: `<div class="marker-content">${index + 1}</div>`,
-                    iconSize: [30, 30],
-                    iconAnchor: [15, 15],
-                });
-                marker.setIcon(customIcon);
-            }
-        });
-    };
-
+    markersArray: Array<Geolocation>;
+    setMarkersArray: React.Dispatch<React.SetStateAction<Geolocation[]>>;
+    routeId: string | null;
+}> = ({markersArray, setMarkersArray}): JSX.Element => {
+    const mapRef = useRef<leaflet.Map | null>(null);
+    const markersMap = useRef<Map<string, leaflet.Marker>>(new Map());
 
     const addMarker = (latitude: number, longitude: number, index?: number, isVisited: boolean = false): void => {
-        const pointKey: string = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
+        const pointKey = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
 
-        if (!markersMap.has(pointKey)) {
+        if (!markersMap.current.has(pointKey)) {
             const markerIndex: number = index !== undefined ? index + 1 : markersArray.length + 1;
+            const visitedClass: "visited" | "not-visited" = isVisited ? "visited" : "not-visited";
 
             const customIcon: leaflet.DivIcon = leaflet.divIcon({
-                className: "custom-marker",
+                className: `custom-marker ${visitedClass}`,
                 html: `<div class="marker-content">${markerIndex}</div>`,
                 iconSize: [30, 30],
                 iconAnchor: [15, 15],
@@ -48,64 +29,59 @@ const MapComponent: React.FC<{
 
             const marker: leaflet.Marker = leaflet
                 .marker([latitude, longitude], {icon: customIcon})
-                .addTo(mapRef.current);
+                .addTo(mapRef.current as leaflet.Map);
 
-            isAdmin() ? marker.on("click", (): void => {
-                marker.remove();
-                markersMap.delete(pointKey);
-                const updatedMarkers: Geolocation[] = markersArray.filter(
-                    (m: Geolocation) =>
-                        m.latitude.toFixed(6) !== latitude.toFixed(6) ||
-                        m.longitude.toFixed(6) !== longitude.toFixed(6)
-                );
-                markersArray.splice(0, markersArray.length, ...updatedMarkers); // Обновляем массив
-                updateMarkersText();
-            }) : marker.on("click", (): void => {
-                console.log('user clicked on marker')
-            })
+            if (isAdmin()) {
+                marker.on("click", (): void => {
+                    marker.remove();
+                    markersMap.current.delete(pointKey);
+                    setMarkersArray((prev: Geolocation[]) =>
+                        prev.filter(
+                            (m: Geolocation) =>
+                                m.latitude.toFixed(6) !== latitude.toFixed(6) ||
+                                m.longitude.toFixed(6) !== longitude.toFixed(6)
+                        )
+                    );
+                });
+            }
 
-            const [lat, long] = pointKey.split(",");
-            markersArray.push({latitude: Number(lat), longitude: Number(long), isVisited: isVisited});
-            markersMap.set(pointKey, marker);
-            updateMarkersText();
+            markersMap.current.set(pointKey, marker);
         }
     };
 
+    useEffect((): void => {
+        markersMap.current.forEach((marker: leaflet.Marker) => marker.remove());
+        markersMap.current.clear();
+
+        markersArray.forEach((markerData: Geolocation, index: number): void => {
+            addMarker(markerData.latitude, markerData.longitude, index, markerData.isVisited);
+        });
+    }, [markersArray]);
+
     useEffect(() => {
-        if (routeId) {
-            axios.get(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/${routeId}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}`
-                }
-            }).then((response: AxiosResponse): void => {
-                const {coordinates} = response.data;
-                coordinates.forEach(({latitude, longitude, isVisited}: Geolocation): void => {
-                    addMarker(latitude, longitude, undefined, isVisited === undefined ? false : isVisited);
-                });
-            }).catch((error): void => {
-                console.log(error)
-            })
-        }
-        mapRef.current = leaflet
-            .map("map")
-            .setView([0, 0], 1);
+        mapRef.current = leaflet.map("map").setView([0, 0], 1);
 
         leaflet
             .tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 maxZoom: 19,
-                attribution:
-                    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             })
             .addTo(mapRef.current);
 
-        isAdmin() && mapRef.current.on("click", (e: leaflet.LeafletMouseEvent): void => {
-            addMarker(e.latlng.lat, e.latlng.lng);
-        });
+        if (isAdmin()) {
+            mapRef.current.on("click", (e: leaflet.LeafletMouseEvent): void => {
+                addMarker(e.latlng.lat, e.latlng.lng);
+                setMarkersArray((prev: Geolocation[]) => [...prev, {
+                    latitude: e.latlng.lat,
+                    longitude: e.latlng.lng,
+                    isVisited: false
+                }]);
+            });
+        }
 
         return (): void => {
             mapRef.current?.remove();
-            markersMap.clear();
+            markersMap.current.clear();
         };
     }, []);
 
@@ -113,8 +89,13 @@ const MapComponent: React.FC<{
         <>
             {isAdmin() && <CitySearch handleCitySelectForMap={(city: any): void => {
                 addMarker(Number(city.lat), Number(city.lon));
+                setMarkersArray((prev: Geolocation[]) => [...prev, {
+                    latitude: Number(city.lat),
+                    longitude: Number(city.lon),
+                    isVisited: false
+                }]);
             }}/>}
-            <div id="map" ref={mapRef}></div>
+            <div id="map"></div>
         </>
     )
 }

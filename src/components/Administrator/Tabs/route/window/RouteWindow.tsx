@@ -166,7 +166,7 @@ const RouteWindow: React.FC<{
                     setDescription={setDescription}
                     setAssignedUser={setAssignedUser}
                 />
-                <MapComponent markersArray={markersArray} routeId={routeId}/>
+                <MapComponent markersArray={markersArray} setMarkersArray={setMarkersArray} routeId={routeId}/>
                 {!routeId && <p>Вы уверены, что хотите создать маршрут?</p>}
                 <div className={styles.buttons}>
                     {routeId && isAdmin() ? (
