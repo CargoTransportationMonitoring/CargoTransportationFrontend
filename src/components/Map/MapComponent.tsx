@@ -13,8 +13,6 @@ const MapComponent: React.FC<{
     routeId: string | null
 }> = ({markersArray, routeId}): JSX.Element => {
     const mapRef: any = useRef();
-
-    const [nearbyMarkers, setNearbyMarkers] = useState<Geolocation[]>([]);
     const markersMap: Map<string, leaflet.Marker> = new Map<string, leaflet.Marker>()
 
     const updateMarkersText = (): void => {
@@ -100,10 +98,6 @@ const MapComponent: React.FC<{
                     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             })
             .addTo(mapRef.current);
-
-        nearbyMarkers.forEach(({latitude, longitude}: Geolocation): void => {
-            addMarker(latitude, longitude);
-        });
 
         isAdmin() && mapRef.current.on("click", (e: leaflet.LeafletMouseEvent): void => {
             addMarker(e.latlng.lat, e.latlng.lng);
