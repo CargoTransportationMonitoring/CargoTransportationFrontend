@@ -37,8 +37,6 @@ const RouteWindow: React.FC<{
             return;
         }
 
-        console.log(markersArray)
-
         const requestBody: routeType = {
             coordinates: markersArray.map((marker: Geolocation): Geolocation => ({
                 latitude: marker.latitude,
@@ -60,7 +58,6 @@ const RouteWindow: React.FC<{
                 dispatch(addRoute({
                     routeId: response.data.id
                 }))
-                console.log('Route created', response.data);
             })
             .catch((error): void => {
                 if (error.response) {
@@ -91,10 +88,9 @@ const RouteWindow: React.FC<{
                 dispatch(removeRoute({
                     routeId: routeId
                 }))
-                console.log('Route deleted', response.data);
             })
         } catch (error) {
-            console.log(error)
+            dispatch(setError(error))
         } finally {
             onCancel()
         }
@@ -133,7 +129,17 @@ const RouteWindow: React.FC<{
     }
 
     const handleUpdatePoints = (): void => {
-        console.log('update points')
+        markersArray.forEach((marker: Geolocation) => console.log(marker))
+        axios.put(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/${routeId}/points`, markersArray, {
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+                'Content-Type': 'application/json',
+            }
+        }).then((response: AxiosResponse): void => {
+            console.log(response)
+        }).catch((error): void => {
+            dispatch(setError(`Ошибка обновления маршрута: ${error}`))
+        })
     }
 
     useEffect((): void => {
@@ -144,6 +150,7 @@ const RouteWindow: React.FC<{
                     'Authorization': `Bearer ${getToken()}`
                 }
             }).then((response: AxiosResponse): void => {
+                console.log(response.data)
                 setMarkersArray(response.data.coordinates);
                 setRouteName(response.data.name);
                 setDescription(response.data.description);

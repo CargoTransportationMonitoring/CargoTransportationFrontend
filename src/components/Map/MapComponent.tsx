@@ -14,7 +14,7 @@ const MapComponent: React.FC<{
     const markersMap = useRef<Map<string, leaflet.Marker>>(new Map());
 
     const addMarker = (latitude: number, longitude: number, index?: number, isVisited: boolean = false): void => {
-        const pointKey = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
+        const pointKey: string = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
 
         if (!markersMap.current.has(pointKey)) {
             const markerIndex: number = index !== undefined ? index + 1 : markersArray.length + 1;
@@ -30,6 +30,7 @@ const MapComponent: React.FC<{
             const marker: leaflet.Marker = leaflet
                 .marker([latitude, longitude], {icon: customIcon})
                 .addTo(mapRef.current as leaflet.Map);
+            markersMap.current.set(pointKey, marker);
 
             if (isAdmin()) {
                 marker.on("click", (): void => {
@@ -43,9 +44,19 @@ const MapComponent: React.FC<{
                         )
                     );
                 });
+            } else {
+                marker.on("click", (): void => {
+                    setMarkersArray((prev: Geolocation[]) =>
+                        prev.map((marker: Geolocation) => {
+                            if (marker.latitude.toFixed(6) === latitude.toFixed(6) &&
+                                marker.longitude.toFixed(6) === longitude.toFixed(6)) {
+                                marker.isVisited = !marker.isVisited;
+                            }
+                            return marker;
+                        })
+                    );
+                });
             }
-
-            markersMap.current.set(pointKey, marker);
         }
     };
 
@@ -70,7 +81,6 @@ const MapComponent: React.FC<{
 
         if (isAdmin()) {
             mapRef.current.on("click", (e: leaflet.LeafletMouseEvent): void => {
-                addMarker(e.latlng.lat, e.latlng.lng);
                 setMarkersArray((prev: Geolocation[]) => [...prev, {
                     latitude: e.latlng.lat,
                     longitude: e.latlng.lng,
