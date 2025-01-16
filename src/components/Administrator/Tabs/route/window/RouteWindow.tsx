@@ -130,7 +130,7 @@ const RouteWindow: React.FC<{
 
     const handleUpdatePoints = (): void => {
         markersArray.forEach((marker: Geolocation) => console.log(marker))
-        axios.put(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/${routeId}/points`, markersArray, {
+        axios.put(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/markPoints/${routeId}`, markersArray, {
             headers: {
                 Authorization: `Bearer ${getToken()}`,
                 'Content-Type': 'application/json',

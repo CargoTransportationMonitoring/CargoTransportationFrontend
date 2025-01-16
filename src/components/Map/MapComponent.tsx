@@ -1,17 +1,17 @@
-import React, {JSX, useEffect, useRef} from "react";
+import React, {FC, JSX, MutableRefObject, useEffect, useRef} from "react";
 import leaflet from "leaflet";
 import {Geolocation} from "../../hooks/useGeolocation";
 import CitySearch from "./CitySearch";
 import "../../App.css";
 import {isAdmin} from "../../util/KeycloakUtils";
 
-const MapComponent: React.FC<{
+const MapComponent: FC<{
     markersArray: Array<Geolocation>;
     setMarkersArray: React.Dispatch<React.SetStateAction<Geolocation[]>>;
     routeId: string | null;
 }> = ({markersArray, setMarkersArray}): JSX.Element => {
-    const mapRef = useRef<leaflet.Map | null>(null);
-    const markersMap = useRef<Map<string, leaflet.Marker>>(new Map());
+    const mapRef: MutableRefObject<leaflet.Map | null> = useRef<leaflet.Map | null>(null);
+    const markersMap: MutableRefObject<Map<string, leaflet.Marker>> = useRef<Map<string, leaflet.Marker>>(new Map());
 
     const addMarker = (latitude: number, longitude: number, index?: number, isVisited: boolean = false): void => {
         const pointKey: string = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
