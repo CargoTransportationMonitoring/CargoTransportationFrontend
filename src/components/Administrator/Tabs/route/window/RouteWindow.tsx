@@ -22,7 +22,7 @@ type routeType = {
 
 const RouteWindow: React.FC<{
     onCancel: () => void,
-    routeId: string | null
+    routeId?: string | undefined
 }> = ({onCancel, routeId}): JSX.Element => {
 
     const [markersArray, setMarkersArray] = useState<Geolocation[]>([])
@@ -173,7 +173,7 @@ const RouteWindow: React.FC<{
                     setDescription={setDescription}
                     setAssignedUser={setAssignedUser}
                 />
-                <MapComponent markersArray={markersArray} setMarkersArray={setMarkersArray} routeId={routeId}/>
+                <MapComponent markersArray={markersArray} setMarkersArray={setMarkersArray}/>
                 {!routeId && <p>Вы уверены, что хотите создать маршрут?</p>}
                 <div className={styles.buttons}>
                     {routeId && isAdmin() ? (

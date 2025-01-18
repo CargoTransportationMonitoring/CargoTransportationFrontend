@@ -19,6 +19,7 @@ import {
 } from "./components/auth/KeycloakService";
 import MainLayout from "./components/Menu/MainLayout";
 import AdminUsersTab from "./components/Administrator/Tabs/users/AdminUsersTab";
+import UserDetails from "./components/Administrator/Tabs/users/UserDetails";
 
 interface ProtectedRouteProps {
     requiredRoles: string[]
@@ -78,7 +79,10 @@ const App: React.FC = (): JSX.Element => {
                     <Route path="profile" element={<AdminProfileTab/>}/>
                     <Route path="cargos" element={<AdminCargoTab/>}/>
                     <Route path="routes" element={<AdminRouteTab/>}/>
-                    <Route path="users" element={<AdminUsersTab/>}/>
+                    <Route path="users">
+                        <Route index element={<AdminUsersTab/>}/>
+                        <Route path={":userId"} element={<UserDetails/>}/>
+                    </Route>
                 </Route>
 
                 {/* 404 */}

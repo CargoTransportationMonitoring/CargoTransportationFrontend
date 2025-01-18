@@ -1,11 +1,15 @@
 import React, {JSX, useState} from "react";
-import RouteWindow from "./window/RouteWindow";
 import RouteList from "./RouteList";
+import FilterComponent from "./filter/FilterComponent";
+import {useSelector} from "react-redux";
+import {FilterType, selectFilter} from "../../../../redux/slices/FilterSlice";
+import RouteWindow from "./window/RouteWindow";
 
 const AdminRouteTab: React.FC = (): JSX.Element => {
 
+    const filter: FilterType = useSelector(selectFilter)
+
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
-    const [activeRouteId, setActiveRouteId] = useState<string | null>(null);
 
     const openModal = (): void => {
         setModalOpen(true);
@@ -15,28 +19,18 @@ const AdminRouteTab: React.FC = (): JSX.Element => {
         setModalOpen(false);
     }
 
-    const handleViewRouteClick = (routeId: string): void => {
-        setActiveRouteId(routeId)
-        openModal()
-    }
-
-    const handleCreateClick = (): void => {
-        setActiveRouteId(null)
-        openModal()
-    }
-
     return (
         <>
-            <RouteList handleClick={handleViewRouteClick}/>
-            <button onClick={handleCreateClick}>Create Route</button>
+            <FilterComponent/>
+            <RouteList filter={filter}/>
+            <button onClick={openModal}>Create Route</button>
             {isModalOpen && (
                 <RouteWindow
                     onCancel={closeModal}
-                    routeId={activeRouteId}
                 />
             )}
         </>
     );
 }
 
-export default AdminRouteTab
+export default AdminRouteTab;

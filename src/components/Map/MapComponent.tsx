@@ -8,13 +8,14 @@ import {isAdmin} from "../../util/KeycloakUtils";
 const MapComponent: FC<{
     markersArray: Array<Geolocation>;
     setMarkersArray: React.Dispatch<React.SetStateAction<Geolocation[]>>;
-    routeId: string | null;
 }> = ({markersArray, setMarkersArray}): JSX.Element => {
     const mapRef: MutableRefObject<leaflet.Map | null> = useRef<leaflet.Map | null>(null);
     const markersMap: MutableRefObject<Map<string, leaflet.Marker>> = useRef<Map<string, leaflet.Marker>>(new Map());
+    const MAX_ZOOM: number = 19;
+    const FRACTION_DIGITS: number = 6;
 
     const addMarker = (latitude: number, longitude: number, index?: number, isVisited: boolean = false): void => {
-        const pointKey: string = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
+        const pointKey: string = `${latitude.toFixed(FRACTION_DIGITS)},${longitude.toFixed(FRACTION_DIGITS)}`;
 
         if (!markersMap.current.has(pointKey)) {
             const markerIndex: number = index !== undefined ? index + 1 : markersArray.length + 1;
@@ -34,13 +35,14 @@ const MapComponent: FC<{
 
             if (isAdmin()) {
                 marker.on("click", (): void => {
+                    // if (isVisited) return убрать возможность удаления посещенной точки
                     marker.remove();
                     markersMap.current.delete(pointKey);
                     setMarkersArray((prev: Geolocation[]) =>
                         prev.filter(
                             (m: Geolocation) =>
-                                m.latitude.toFixed(6) !== latitude.toFixed(6) ||
-                                m.longitude.toFixed(6) !== longitude.toFixed(6)
+                                m.latitude.toFixed(FRACTION_DIGITS) !== latitude.toFixed(FRACTION_DIGITS) ||
+                                m.longitude.toFixed(FRACTION_DIGITS) !== longitude.toFixed(FRACTION_DIGITS)
                         )
                     );
                 });
@@ -48,8 +50,8 @@ const MapComponent: FC<{
                 marker.on("click", (): void => {
                     setMarkersArray((prev: Geolocation[]) =>
                         prev.map((marker: Geolocation) => {
-                            if (marker.latitude.toFixed(6) === latitude.toFixed(6) &&
-                                marker.longitude.toFixed(6) === longitude.toFixed(6)) {
+                            if (marker.latitude.toFixed(FRACTION_DIGITS) === latitude.toFixed(FRACTION_DIGITS) &&
+                                marker.longitude.toFixed(FRACTION_DIGITS) === longitude.toFixed(FRACTION_DIGITS)) {
                                 marker.isVisited = !marker.isVisited;
                             }
                             return marker;
@@ -74,7 +76,7 @@ const MapComponent: FC<{
 
         leaflet
             .tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                maxZoom: 19,
+                maxZoom: MAX_ZOOM,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             })
             .addTo(mapRef.current);

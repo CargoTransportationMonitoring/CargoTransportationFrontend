@@ -21,10 +21,16 @@ export const routesSlice: Slice<RouteType[]> = createSlice({
         },
         removeRoute: (state: RouteType[], action: PayloadAction<RouteType>): RouteType[] => {
             return state.filter((route: RouteType): boolean => route.routeId !== action.payload.routeId)
+        },
+        clearRoutes: (): RouteType[] => {
+            return initialState
+        },
+        setRoutes: (state: RouteType[], action: PayloadAction<RouteType[]>): RouteType[] => {
+            return action.payload
         }
     }
 })
 
 export const selectRoutes = (state: RootState): RouteType[] => state.routes
-export const {addRoute, removeRoute} = routesSlice.actions
+export const {addRoute, removeRoute, clearRoutes, setRoutes} = routesSlice.actions
 export default routesSlice.reducer
