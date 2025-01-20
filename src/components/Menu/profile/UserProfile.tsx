@@ -101,7 +101,7 @@ const UserProfile: React.FC = (): JSX.Element => {
 
             <h2>Email: {tokenData.email}</h2>
             <div>
-                <label>First name:</label>
+                <label htmlFor="firstName">First name:</label>
                 {isEditing ? (
                     <input
                         type="text"
@@ -109,11 +109,11 @@ const UserProfile: React.FC = (): JSX.Element => {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
                     />
                 ) : (
-                    <h2>{firstName}</h2>
+                    <h2 id="firstName">{firstName}</h2>
                 )}
             </div>
             <div>
-                <label>Last name:</label>
+                <label htmlFor="lastName">Last name:</label>
                 {isEditing ? (
                     <input
                         type="text"
@@ -121,7 +121,7 @@ const UserProfile: React.FC = (): JSX.Element => {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
                     />
                 ) : (
-                    <h2>{lastName}</h2>
+                    <h2 id="lastName">{lastName}</h2>
                 )}
             </div>
             <button onClick={toggleEditMode}>

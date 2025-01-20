@@ -70,14 +70,12 @@ const App: React.FC = (): JSX.Element => {
                 {/* Защищенные маршруты для перевозчика */}
                 <Route path="/main" element={<ProtectedRoute requiredRoles={['user']}/>}>
                     <Route path="profile" element={<CarrierProfileTab/>}/>
-                    <Route path="cargos" element={<CarrierCargoTab/>}/>
                     <Route path="routes" element={<CarrierRouteTab/>}/>
                 </Route>
 
                 {/* Защищенные маршруты для администратора */}
                 <Route path="/admin" element={<ProtectedRoute requiredRoles={['admin']}/>}>
                     <Route path="profile" element={<AdminProfileTab/>}/>
-                    <Route path="cargos" element={<AdminCargoTab/>}/>
                     <Route path="routes" element={<AdminRouteTab/>}/>
                     <Route path="users">
                         <Route index element={<AdminUsersTab/>}/>

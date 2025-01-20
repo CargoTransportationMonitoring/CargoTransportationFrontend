@@ -10,6 +10,7 @@ import {setError} from "../../../../redux/slices/ErrorSlice";
 import {isAdmin, parseJwt} from "../../../../util/KeycloakUtils";
 import {FilterType} from "../../../../redux/slices/FilterSlice";
 import RouteWindow from "./window/RouteWindow";
+import StatusTabs from "../StatusTabs";
 
 const RouteList: React.FC<{
     filter?: FilterType
@@ -35,14 +36,19 @@ const RouteList: React.FC<{
 
     useEffect((): void => {
         let additionalParams: string = ''
+        let statusParameter: string = 'NEW'
 
         if (filter?.username) {
             additionalParams = `username=${filter.username}`
         }
+        if (filter?.routeStatus) {
+            statusParameter = filter.routeStatus
+        }
+        additionalParams = `${additionalParams}&routeStatus=${statusParameter}`
 
         const serverUri: string = isAdmin()
             ? `${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}?${additionalParams}`
-            : `${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/user/${parseJwt(getToken()).sub}`
+            : `${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/user/${parseJwt(getToken()).sub}?${additionalParams}`
 
         axios.get(serverUri, {
             headers: {
@@ -62,6 +68,7 @@ const RouteList: React.FC<{
 
     return (
         <>
+            <StatusTabs/>
             <div>
                 {
                     routes.map((route: RouteType) => (

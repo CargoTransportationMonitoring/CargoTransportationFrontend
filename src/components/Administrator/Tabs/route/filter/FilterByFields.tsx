@@ -3,7 +3,7 @@ import {useDispatch} from "react-redux";
 import {Dispatch} from "@reduxjs/toolkit";
 import {setFilter} from "../../../../../redux/slices/FilterSlice";
 
-const FilterComponent: FC = (): JSX.Element => {
+const FilterByFields: FC = (): JSX.Element => {
 
     const [usernameInput, setUsernameInput] = useState<string>("");
     const dispatch: Dispatch = useDispatch()
@@ -33,4 +33,4 @@ const FilterComponent: FC = (): JSX.Element => {
     )
 }
 
-export default FilterComponent
+export default FilterByFields
