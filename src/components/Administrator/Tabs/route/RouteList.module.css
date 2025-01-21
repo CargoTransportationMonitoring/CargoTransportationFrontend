@@ -1,0 +1,45 @@
+.routesTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+.routesTable th, .routesTable td {
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+}
+
+.routesTable th {
+    background-color: #00796b; /* Тёмно-бирюзовый */
+    color: #ffffff; /* Белый текст */
+    font-weight: bold;
+}
+
+.routesTable tr:nth-child(even) {
+    background-color: #00796b; /* Светло-бирюзовый */
+}
+
+.routesTable tr:nth-child(odd) {
+    background-color: #13a89c; /* Белый */
+}
+
+.routesTable tr:hover {
+    background-color: #194b46; /* Более насыщенный бирюзовый */
+}
+
+.viewButton {
+    background-color: #ff5722; /* Оранжево-красный */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.viewButton:hover {
+    background-color: #e64a19; /* Более насыщенный оранжево-красный */
+}

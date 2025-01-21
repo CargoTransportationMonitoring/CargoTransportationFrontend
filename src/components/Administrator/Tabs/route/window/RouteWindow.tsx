@@ -17,7 +17,8 @@ type routeType = {
     name: string,
     description: string,
     assignedUsername: string,
-    coordinates: Geolocation[]
+    coordinates: Geolocation[],
+    routeStatus: "NEW" | "IN_PROGRESS" | "COMPLETED"
 }
 
 const RouteWindow: React.FC<{
@@ -30,6 +31,8 @@ const RouteWindow: React.FC<{
     const [routeName, setRouteName] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [assignedUser, setAssignedUser] = useState<string>('');
+    const [routeStatus, setRouteStatus] = useState<"NEW" | "IN_PROGRESS" | "COMPLETED">("NEW")
+
 
     const handleCreate = (): void => {
         if (markersArray.length === 0) {
@@ -44,7 +47,8 @@ const RouteWindow: React.FC<{
             })),
             name: routeName,
             description: description,
-            assignedUsername: assignedUser
+            assignedUsername: assignedUser,
+            routeStatus: "NEW"
         };
 
         axios
@@ -110,7 +114,8 @@ const RouteWindow: React.FC<{
             })),
             name: routeName,
             description: description,
-            assignedUsername: assignedUser
+            assignedUsername: assignedUser,
+            routeStatus: routeStatus
         };
 
 
@@ -128,7 +133,7 @@ const RouteWindow: React.FC<{
         });
     }
 
-    const handleUpdatePoints = (): void => {
+    const handleUpdateProgression = (): void => {
         markersArray.forEach((marker: Geolocation) => console.log(marker))
         axios.put(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/markPoints/${routeId}`, markersArray, {
             headers: {
@@ -155,6 +160,7 @@ const RouteWindow: React.FC<{
                 setRouteName(response.data.name);
                 setDescription(response.data.description);
                 setAssignedUser(response.data.assignedUsername);
+                setRouteStatus(response.data.routeStatus);
             }).catch((error): void => {
                 dispatch(setError(error))
             })
@@ -169,9 +175,11 @@ const RouteWindow: React.FC<{
                     routeName={routeName}
                     description={description}
                     assignedUser={assignedUser}
+                    routeStatus={routeStatus}
                     setRouteName={setRouteName}
                     setDescription={setDescription}
                     setAssignedUser={setAssignedUser}
+                    setRouteStatus={setRouteStatus}
                 />
                 <MapComponent markersArray={markersArray} setMarkersArray={setMarkersArray}/>
                 {!routeId && <p>Вы уверены, что хотите создать маршрут?</p>}
@@ -185,7 +193,7 @@ const RouteWindow: React.FC<{
                         isAdmin() ? (
                             <button onClick={handleCreate} className={styles.button}>Create</button>
                         ) : (
-                            <button onClick={handleUpdatePoints} className={styles.button}>Update points</button>
+                            <button onClick={handleUpdateProgression} className={styles.button}>Update</button>
                         )
                     )}
                     <button onClick={onCancel} className={styles.button}>Cancel</button>
