@@ -16,7 +16,6 @@ const StatusTabs: FC = (): JSX.Element => {
         dispatch(setStatus(tab));
     };
 
-
     return (
         <div className="tabs">
             {TABS.map((tab: string) => (

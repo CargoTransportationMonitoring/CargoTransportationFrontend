@@ -1,20 +1,29 @@
 import React, {JSX} from "react";
 import styles from './RouteItem.module.css'
+import {RouteType} from "../../../../redux/slices/RouteSlice";
 
 const RouteItem: React.FC<{
-    routeId: string
+    route: RouteType
     handleClick: (routeId: string) => void
-}> = ({routeId, handleClick}): JSX.Element => {
+}> = ({route, handleClick}): JSX.Element => {
     return (
-        <div className={styles.routeItem}>
-            <p className={styles.routeId}>
-                Route ID: {routeId}
-                <button className={styles.viewButton} onClick={() => handleClick(routeId)} title="View Details">
+        <tr className={styles.routeItem}>
+            <td>{route.id}</td>
+            <td>{route.name}</td>
+            <td>{route.description}</td>
+            <td>{route.assignedUsername}</td>
+            <td>{route.pointsCount}</td>
+            <td>
+                <button
+                    className={styles.viewButton}
+                    onClick={() => handleClick(route.id)}
+                    title="View Details"
+                >
                     👁️
                 </button>
-            </p>
-        </div>
-    )
+            </td>
+        </tr>
+    );
 }
 
 export default RouteItem

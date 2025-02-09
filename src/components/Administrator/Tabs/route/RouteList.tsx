@@ -2,15 +2,25 @@ import React, {JSX, useEffect, useState} from "react";
 import RouteItem from "./RouteItem";
 import axios, {AxiosResponse} from "axios";
 import {API_V1_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../../../util/Constants";
-import {getToken} from "../../../auth/KeycloakService";
+import {getToken} from "../../../../util/KeycloakService";
 import {useDispatch, useSelector} from "react-redux";
 import {RouteType, selectRoutes, setRoutes} from "../../../../redux/slices/RouteSlice";
 import {Dispatch} from "@reduxjs/toolkit";
-import {setError} from "../../../../redux/slices/ErrorSlice";
+import {setError} from "../../../../redux/slices/InfoTabSlice";
 import {isAdmin, parseJwt} from "../../../../util/KeycloakUtils";
 import {FilterType} from "../../../../redux/slices/FilterSlice";
 import RouteWindow from "./window/RouteWindow";
 import StatusTabs from "../StatusTabs";
+import styles from "./RouteList.module.css"
+
+type ResponseItemType = {
+    id: number,
+    name: string,
+    description: string,
+    assignedUsername: string,
+    routeStatus: "NEW" | "IN_PROGRESS" | "COMPLETED",
+    pointsCount: number
+}
 
 const RouteList: React.FC<{
     filter?: FilterType
@@ -41,6 +51,16 @@ const RouteList: React.FC<{
         if (filter?.username) {
             additionalParams = `username=${filter.username}`
         }
+        if (filter?.pointsNumberFrom) {
+            additionalParams = `${additionalParams}&pointsNumberFrom=${filter.pointsNumberFrom}`
+        }
+        if (filter?.pointsNumberTo) {
+            additionalParams = `${additionalParams}&pointsNumberTo=${filter.pointsNumberTo}`
+        }
+        if (filter?.description) {
+            additionalParams = `${additionalParams}&description=${filter.description}`
+        }
+
         if (filter?.routeStatus) {
             statusParameter = filter.routeStatus
         }
@@ -56,9 +76,13 @@ const RouteList: React.FC<{
                 'Authorization': `Bearer ${getToken()}`
             }
         }).then((response: AxiosResponse): void => {
-            const routeIds: number[] = response.data.content
-            const routes: RouteType[] = routeIds.map((routeId: number): RouteType => ({
-                routeId: routeId.toString()
+            const routes: RouteType[] = response.data.content.map((responseItem: ResponseItemType): RouteType => ({
+                id: responseItem.id.toString(),
+                name: responseItem.name,
+                description: responseItem.description,
+                assignedUsername: responseItem.assignedUsername,
+                routeStatus: responseItem.routeStatus,
+                pointsCount: responseItem.pointsCount
             }))
             dispatch(setRoutes(routes))
         }).catch((error): void => {
@@ -69,16 +93,27 @@ const RouteList: React.FC<{
     return (
         <>
             <StatusTabs/>
-            <div>
-                {
-                    routes.map((route: RouteType) => (
-                        <RouteItem key={route.routeId}
-                                   routeId={route.routeId}
-                                   handleClick={handleViewRouteClick}
-                        />
-                    ))
-                }
-            </div>
+            <table className={styles.routesTable}>
+                <thead>
+                <tr>
+                    <th>Route ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Assigned Username</th>
+                    <th>Points Count</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {routes.map((route: RouteType) => (
+                    <RouteItem
+                        key={route.id}
+                        route={route}
+                        handleClick={handleViewRouteClick}
+                    />
+                ))}
+                </tbody>
+            </table>
             {isModalOpen && (
                 <RouteWindow
                     onCancel={closeModal}
@@ -86,7 +121,6 @@ const RouteList: React.FC<{
                 />
             )}
         </>
-
     )
 }
 

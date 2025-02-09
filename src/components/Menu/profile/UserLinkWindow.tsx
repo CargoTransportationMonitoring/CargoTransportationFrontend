@@ -2,14 +2,14 @@ import React, {JSX, useState} from "react";
 import styles from "../../Administrator/Tabs/route/window/CreateRouteWindow.module.css";
 import axios, {AxiosResponse} from "axios";
 import {API_V1_USER_PREFIX, SERVER_CORE_URI} from "../../../util/Constants";
-import {getToken} from "../../auth/KeycloakService";
+import {getToken} from "../../../util/KeycloakService";
 import {useDispatch} from "react-redux";
 import {Dispatch} from "@reduxjs/toolkit";
-import {setError} from "../../../redux/slices/ErrorSlice";
+import {setError} from "../../../redux/slices/InfoTabSlice";
 
 const UserLinkWindow: React.FC<{
     onCancel: () => void
-    updateAdmin: (isAdminPresent: boolean) => void
+    updateAdmin: (adminUsername: string) => void
 }> = ({onCancel, updateAdmin}): JSX.Element => {
 
     const [linkCode, setLinkCode] = useState<string>('')
@@ -24,11 +24,11 @@ const UserLinkWindow: React.FC<{
                 'Authorization': `Bearer ${getToken()}`
             }
         }).then((response: AxiosResponse): void => {
-            localStorage.setItem('adminUsername', response.data)
-            onCancel()
-            updateAdmin(true)
+            updateAdmin(response.data)
         }).catch((error): void => {
             dispatch(setError(error))
+        }).finally((): void => {
+            onCancel()
         })
     }
 

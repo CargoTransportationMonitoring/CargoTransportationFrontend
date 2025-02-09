@@ -4,11 +4,11 @@ import axios, {AxiosResponse} from "axios";
 import {SERVER_CORE_URI} from "../../../../util/Constants";
 import {useDispatch} from "react-redux";
 import {Dispatch} from "@reduxjs/toolkit";
-import {setError} from "../../../../redux/slices/ErrorSlice";
-import {getToken} from "../../../auth/KeycloakService";
+import {setError} from "../../../../redux/slices/InfoTabSlice";
+import {getToken} from "../../../../util/KeycloakService";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 
-type UserType = {
+export type UserType = {
     username: string,
     id: string
 }

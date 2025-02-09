@@ -8,7 +8,7 @@ import {
     KEYCLOAK_URL
 } from "./Constants";
 import Keycloak from "keycloak-js";
-import {getKeycloakInstance} from "../components/auth/KeycloakService";
+import {getKeycloakInstance} from "./KeycloakService";
 
 const ALGORITHM: string = 'SHA-256'
 

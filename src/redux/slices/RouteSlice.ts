@@ -2,7 +2,12 @@ import {createSlice, PayloadAction, Slice} from "@reduxjs/toolkit";
 import {RootState} from "../store";
 
 export type RouteType = {
-    routeId: string
+    id: string
+    name: string
+    description: string
+    assignedUsername: string
+    routeStatus: "NEW" | "IN_PROGRESS" | "COMPLETED"
+    pointsCount: number
 }
 
 const initialState: RouteType[] = []
@@ -12,7 +17,7 @@ export const routesSlice: Slice<RouteType[]> = createSlice({
     initialState,
     reducers: {
         addRoute: (state: RouteType[], action: PayloadAction<RouteType>): RouteType[] => {
-            const isUnique: boolean = state.find((route: RouteType): boolean => route.routeId === action.payload.routeId) === undefined
+            const isUnique: boolean = state.find((route: RouteType): boolean => route.id === action.payload.id) === undefined
             if (isUnique)
                 return [...state, action.payload]
             else {
@@ -20,7 +25,7 @@ export const routesSlice: Slice<RouteType[]> = createSlice({
             }
         },
         removeRoute: (state: RouteType[], action: PayloadAction<RouteType>): RouteType[] => {
-            return state.filter((route: RouteType): boolean => route.routeId !== action.payload.routeId)
+            return state.filter((route: RouteType): boolean => route.id !== action.payload.id)
         },
         clearRoutes: (): RouteType[] => {
             return initialState

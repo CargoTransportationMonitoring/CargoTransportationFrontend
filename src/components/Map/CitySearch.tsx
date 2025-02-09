@@ -3,7 +3,7 @@ import axios, {AxiosResponse} from "axios";
 import styles from "./CitySearch.module.css";
 import {useDispatch} from "react-redux";
 import {Dispatch} from "@reduxjs/toolkit";
-import {setError} from "../../redux/slices/ErrorSlice";
+import {setError} from "../../redux/slices/InfoTabSlice";
 
 interface CitySearchProps {
     handleCitySelectForMap: (city: any) => void;
