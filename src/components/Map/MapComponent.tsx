@@ -1,9 +1,15 @@
 import React, {FC, JSX, MutableRefObject, useEffect, useRef} from "react";
 import leaflet from "leaflet";
-import {Geolocation} from "../../hooks/useGeolocation";
 import CitySearch from "./CitySearch";
 import "../../App.css";
 import {isAdmin} from "../../util/KeycloakUtils";
+
+export interface Geolocation {
+    latitude: number,
+    longitude: number,
+    isVisited?: boolean,
+    id?: number,
+}
 
 const MapComponent: FC<{
     markersArray: Array<Geolocation>;
@@ -35,7 +41,7 @@ const MapComponent: FC<{
 
             if (isAdmin()) {
                 marker.on("click", (): void => {
-                    // if (isVisited) return убрать возможность удаления посещенной точки
+                    if (isVisited) return
                     marker.remove();
                     markersMap.current.delete(pointKey);
                     setMarkersArray((prev: Geolocation[]) =>

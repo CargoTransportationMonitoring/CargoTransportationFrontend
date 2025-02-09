@@ -2,10 +2,10 @@ import React, {JSX, useState} from "react";
 import styles from './LinkUserWindow.module.css'
 import axios, {AxiosResponse} from "axios";
 import {API_V1_USER_PREFIX, SERVER_CORE_URI} from "../../../../util/Constants";
-import {getToken} from "../../../auth/KeycloakService";
+import {getToken} from "../../../../util/KeycloakService";
 import {useDispatch} from "react-redux";
 import {Dispatch} from "@reduxjs/toolkit";
-import {setError} from "../../../../redux/slices/ErrorSlice";
+import {setError} from "../../../../redux/slices/InfoTabSlice";
 import CodeDisplay from "./CodeDisplay";
 
 const LinkUserWindow: React.FC<{

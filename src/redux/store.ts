@@ -1,19 +1,19 @@
 import {configureStore} from "@reduxjs/toolkit";
-import errorReducer from "./slices/ErrorSlice";
+import infoTabReducer, {InfoTabType} from "./slices/InfoTabSlice";
 import routeReducer from "./slices/RouteSlice";
 import filterReducer from "./slices/FilterSlice";
 import {RouteType} from "./slices/RouteSlice";
 import {FilterType} from "./slices/FilterSlice";
 
 type RootReducer = {
-    error: string
+    infoTab: InfoTabType
     routes: RouteType[]
     filter: FilterType
 };
 
 const store = configureStore<RootReducer>({
     reducer: {
-        error: errorReducer,
+        infoTab: infoTabReducer,
         routes: routeReducer,
         filter: filterReducer
     }

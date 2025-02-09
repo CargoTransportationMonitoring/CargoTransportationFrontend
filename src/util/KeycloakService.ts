@@ -1,5 +1,5 @@
 import Keycloak from 'keycloak-js';
-import {KEYCLOAK_CLIENT_ID, KEYCLOAK_REALM, KEYCLOAK_URL} from "../../util/Constants";
+import {KEYCLOAK_CLIENT_ID, KEYCLOAK_REALM, KEYCLOAK_URL} from "./Constants";
 
 const keycloak: Keycloak = new Keycloak({
     url: KEYCLOAK_URL,

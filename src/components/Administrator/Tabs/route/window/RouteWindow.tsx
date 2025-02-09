@@ -1,22 +1,28 @@
 import React, {JSX, useEffect, useState} from "react";
 import styles from './CreateRouteWindow.module.css'
 import MapComponent from "../../../../Map/MapComponent";
-import {setError} from "../../../../../redux/slices/ErrorSlice";
+import {setError, setInfo} from "../../../../../redux/slices/InfoTabSlice";
 import axios, {AxiosResponse} from "axios";
-import {Geolocation} from "../../../../../hooks/useGeolocation";
-import {getToken} from "../../../../auth/KeycloakService";
+import {getToken} from "../../../../../util/KeycloakService";
 import {API_V1_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../../../../util/Constants";
 import {useDispatch} from "react-redux";
 import {Dispatch} from "@reduxjs/toolkit";
 import {addRoute, removeRoute} from "../../../../../redux/slices/RouteSlice";
-import RouteForm from "./RouteForm";
+import {Geolocation} from "../../../../Map/MapComponent";
+import RouteAdminForm from "./RouteAdminForm";
 import {isAdmin} from "../../../../../util/KeycloakUtils";
+import RouteCarrierForm from "../../../../СargoСarrier/Tabs/route/RouteCarrierForm";
 
 
-type routeType = {
+type RouteType = {
     name: string,
     description: string,
     assignedUsername: string,
+    coordinates: Geolocation[],
+    routeStatus: "NEW" | "IN_PROGRESS" | "COMPLETED"
+}
+
+type UpdateStatusAndPointsType = {
     coordinates: Geolocation[],
     routeStatus: "NEW" | "IN_PROGRESS" | "COMPLETED"
 }
@@ -40,7 +46,7 @@ const RouteWindow: React.FC<{
             return;
         }
 
-        const requestBody: routeType = {
+        const requestBody: RouteType = {
             coordinates: markersArray.map((marker: Geolocation): Geolocation => ({
                 latitude: marker.latitude,
                 longitude: marker.longitude,
@@ -82,22 +88,25 @@ const RouteWindow: React.FC<{
     };
 
     const handleDelete = (): void => {
-        try {
-            axios.delete(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/${routeId}`, {
-                headers: {
-                    Authorization: `Bearer ${getToken()}`,
-                    'Content-Type': 'application/json',
-                },
-            }).then((response: AxiosResponse): void => {
-                dispatch(removeRoute({
-                    routeId: routeId
-                }))
-            })
-        } catch (error) {
-            dispatch(setError(error))
-        } finally {
+        axios.delete(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/${routeId}`, {
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+                'Content-Type': 'application/json',
+            },
+        }).then((response: AxiosResponse): void => {
+            dispatch(removeRoute({
+                routeId: routeId
+            }))
+            dispatch(setInfo('Маршрут успешно удален'))
+        }).catch((error): void => {
+            if (error.response && error.response.data && error.response.data.error) {
+                dispatch(setError(`Ошибка удаления маршрута: ${error.response.data.error}`));
+            } else {
+                dispatch(setError(`Ошибка удаления маршрута: ${error.message}`));
+            }
+        }).finally((): void => {
             onCancel()
-        }
+        })
     }
 
     const handleUpdate = (): void => {
@@ -107,7 +116,7 @@ const RouteWindow: React.FC<{
         }
         markersArray.forEach((marker: Geolocation) => console.log(marker))
 
-        const requestBody: routeType = {
+        const requestBody: RouteType = {
             coordinates: markersArray.map((marker: Geolocation): Geolocation => ({
                 latitude: marker.latitude,
                 longitude: marker.longitude,
@@ -125,9 +134,13 @@ const RouteWindow: React.FC<{
                 'Content-Type': 'application/json',
             }
         }).then((response: AxiosResponse): void => {
-            console.log(response)
+            dispatch(setInfo('Маршрут успешно обновлен'));
         }).catch((error): void => {
-            dispatch(setError(`Ошибка обновления маршрута: ${error}`))
+            if (error.response && error.response.data && error.response.data.error) {
+                dispatch(setError(`Ошибка обновления маршрута: ${error.response.data.error}`));
+            } else {
+                dispatch(setError(`Ошибка обновления маршрута: ${error.message}`));
+            }
         }).finally((): void => {
             onCancel();
         });
@@ -135,15 +148,25 @@ const RouteWindow: React.FC<{
 
     const handleUpdateProgression = (): void => {
         markersArray.forEach((marker: Geolocation) => console.log(marker))
-        axios.put(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/markPoints/${routeId}`, markersArray, {
+        const requestBody: UpdateStatusAndPointsType = {
+            coordinates: markersArray,
+            routeStatus: routeStatus
+        }
+        axios.put(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/markPoints/${routeId}`, requestBody, {
             headers: {
                 Authorization: `Bearer ${getToken()}`,
                 'Content-Type': 'application/json',
             }
         }).then((response: AxiosResponse): void => {
-            console.log(response)
+            dispatch(setInfo('Маршрут успешно обновлен'))
         }).catch((error): void => {
-            dispatch(setError(`Ошибка обновления маршрута: ${error}`))
+            if (error.response && error.response.data && error.response.data.error) {
+                dispatch(setError(`Ошибка обновления маршрута: ${error.response.data.error}`));
+            } else {
+                dispatch(setError(`Ошибка обновления маршрута: ${error.message}`));
+            }
+        }).finally((): void => {
+            onCancel()
         })
     }
 
@@ -171,7 +194,7 @@ const RouteWindow: React.FC<{
         <div className={styles.overlay}>
             <div className={styles.modal}>
                 {!!routeId ? <h2>Просмотр и редактирование маршрута</h2> : <h2>Создание маршрута</h2>}
-                <RouteForm
+                {isAdmin() ? <RouteAdminForm
                     routeName={routeName}
                     description={description}
                     assignedUser={assignedUser}
@@ -179,8 +202,14 @@ const RouteWindow: React.FC<{
                     setRouteName={setRouteName}
                     setDescription={setDescription}
                     setAssignedUser={setAssignedUser}
+                /> : <RouteCarrierForm
+                    routeName={routeName}
+                    description={description}
+                    assignedUser={assignedUser}
+                    routeStatus={routeStatus}
                     setRouteStatus={setRouteStatus}
                 />
+                }
                 <MapComponent markersArray={markersArray} setMarkersArray={setMarkersArray}/>
                 {!routeId && <p>Вы уверены, что хотите создать маршрут?</p>}
                 <div className={styles.buttons}>
