@@ -68,6 +68,7 @@ const RouteWindow: React.FC<{
                 dispatch(addRoute({
                     routeId: response.data.id
                 }))
+                dispatch(setInfo('Маршрут успешно создан'));
             })
             .catch((error): void => {
                 if (error.response) {

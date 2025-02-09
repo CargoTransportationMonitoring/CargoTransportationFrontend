@@ -1,7 +1,7 @@
 import React, {JSX, useEffect, useState} from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './App.css';
-import Error from "./components/Menu/error/Error";
+import InfoSection from "./components/Menu/info/InfoSection";
 import NotFound from "./components/NotFound/NotFound";
 import AdminRouteTab from "./components/Administrator/Tabs/route/AdminRouteTab";
 import CarrierRouteTab from "./components/СargoСarrier/Tabs/route/CarrierRouteTab";
@@ -85,7 +85,7 @@ const App: React.FC = (): JSX.Element => {
                     getKeycloakInstance().resourceAccess['cargotransportation-client'].roles[0]
                 }/>}/>
             </Routes>
-            <Error/>
+            <InfoSection/>
         </BrowserRouter>
     )
 }

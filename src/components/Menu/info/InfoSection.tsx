@@ -4,7 +4,7 @@ import {toast, ToastContainer} from "react-toastify";
 import {useDispatch, useSelector} from "react-redux";
 import {clearError, clearInfo, clearWarn, selectError, selectInfo, selectWarn} from "../../../redux/slices/InfoTabSlice";
 
-const Error: React.FC = (): JSX.Element => {
+const InfoSection: React.FC = (): JSX.Element => {
     const errorMessage: string = useSelector(selectError)
     const infoMessage: string = useSelector(selectInfo)
     const warnMessage: string = useSelector(selectWarn)
@@ -29,4 +29,4 @@ const Error: React.FC = (): JSX.Element => {
     )
 }
 
-export default Error;
+export default InfoSection;

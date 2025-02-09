@@ -47,7 +47,7 @@ const RouteList: React.FC<{
     useEffect((): void => {
         let additionalParams: string = ''
         let statusParameter: string = 'NEW'
-
+        console.log(filter)
         if (filter?.username) {
             additionalParams = `username=${filter.username}`
         }
@@ -59,6 +59,9 @@ const RouteList: React.FC<{
         }
         if (filter?.description) {
             additionalParams = `${additionalParams}&description=${filter.description}`
+        }
+        if (filter?.name) {
+            additionalParams = `routeName=${filter.name}`
         }
 
         if (filter?.routeStatus) {

@@ -1,6 +1,6 @@
 import React, {JSX, useState} from "react";
 import RouteList from "./RouteList";
-import FilterByFields from "./filter/FilterByFields";
+import FilterByFields from "../../../Menu/filter/FilterByFields";
 import {useSelector} from "react-redux";
 import {FilterType, selectFilter} from "../../../../redux/slices/FilterSlice";
 import RouteWindow from "./window/RouteWindow";
