@@ -14,3 +14,4 @@ export const API_V1_USER_PREFIX: string = 'api/v1/user'
 
 export const SERVER_ROUTE_URI: string = 'http://localhost:8082'
 export const API_V1_ROUTE_PREFIX: string = 'api/v1/routes'
+export const API_V1_SINGLE_ROUTE_PREFIX: string = 'api/v1/route'

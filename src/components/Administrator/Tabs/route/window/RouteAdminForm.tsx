@@ -5,7 +5,7 @@ import {getToken} from "../../../../../util/KeycloakService";
 import {setError} from "../../../../../redux/slices/InfoTabSlice";
 import {useDispatch} from "react-redux";
 import {Dispatch} from "@reduxjs/toolkit";
-import {UserType} from "../../users/AdminUsersTab";
+import {UserType} from "../../../../Menu/filter/FilterByFields";
 
 const RouteAdminForm: React.FC<{
     routeName: string,

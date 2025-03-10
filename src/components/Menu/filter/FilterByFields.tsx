@@ -2,12 +2,16 @@ import React, {FC, JSX, useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {Dispatch} from "@reduxjs/toolkit";
 import {setFilterByFields} from "../../../redux/slices/FilterSlice";
-import {UserType} from "../../Administrator/Tabs/users/AdminUsersTab";
 import axios, {AxiosResponse} from "axios";
 import {SERVER_CORE_URI} from "../../../util/Constants";
 import {getToken} from "../../../util/KeycloakService";
 import {setError} from "../../../redux/slices/InfoTabSlice";
 import {isAdmin} from "../../../util/KeycloakUtils";
+
+export type UserType = {
+    username: string,
+    id: string
+}
 
 const FilterByFields: FC = (): JSX.Element => {
 

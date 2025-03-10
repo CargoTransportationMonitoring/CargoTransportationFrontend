@@ -16,7 +16,7 @@ const LinkAdminSection: React.FC<{
     const dispatch: Dispatch = useDispatch()
 
     const handleUnlink = (): void => {
-        axios.put(`${SERVER_CORE_URI}/${API_V1_USER_PREFIX}/unlink/${tokenData.sub}`, {}, {
+        axios.put(`${SERVER_CORE_URI}/${API_V1_USER_PREFIX}/${tokenData.sub}/unlink`, {}, {
             headers: {
                 Authorization: `Bearer ${getToken()}`,
                 "Content-Type": "application/json"

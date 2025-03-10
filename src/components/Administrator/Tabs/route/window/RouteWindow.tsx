@@ -4,7 +4,7 @@ import MapComponent from "../../../../Map/MapComponent";
 import {setError, setInfo} from "../../../../../redux/slices/InfoTabSlice";
 import axios, {AxiosResponse} from "axios";
 import {getToken} from "../../../../../util/KeycloakService";
-import {API_V1_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../../../../util/Constants";
+import {API_V1_ROUTE_PREFIX, API_V1_SINGLE_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../../../../util/Constants";
 import {useDispatch} from "react-redux";
 import {Dispatch} from "@reduxjs/toolkit";
 import {addRoute, removeRoute} from "../../../../../redux/slices/RouteSlice";
@@ -58,7 +58,7 @@ const RouteWindow: React.FC<{
         };
 
         axios
-            .post(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}`, requestBody, {
+            .post(`${SERVER_ROUTE_URI}/${API_V1_SINGLE_ROUTE_PREFIX}`, requestBody, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`,
                     'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const RouteWindow: React.FC<{
     };
 
     const handleDelete = (): void => {
-        axios.delete(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/${routeId}`, {
+        axios.delete(`${SERVER_ROUTE_URI}/${API_V1_SINGLE_ROUTE_PREFIX}/${routeId}`, {
             headers: {
                 Authorization: `Bearer ${getToken()}`,
                 'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ const RouteWindow: React.FC<{
         };
 
 
-        axios.put(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/${routeId}`, requestBody, {
+        axios.put(`${SERVER_ROUTE_URI}/${API_V1_SINGLE_ROUTE_PREFIX}/${routeId}`, requestBody, {
             headers: {
                 Authorization: `Bearer ${getToken()}`,
                 'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ const RouteWindow: React.FC<{
             coordinates: markersArray,
             routeStatus: routeStatus
         }
-        axios.put(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/markPoints/${routeId}`, requestBody, {
+        axios.put(`${SERVER_ROUTE_URI}/${API_V1_SINGLE_ROUTE_PREFIX}/${routeId}/mark-points`, requestBody, {
             headers: {
                 Authorization: `Bearer ${getToken()}`,
                 'Content-Type': 'application/json',
@@ -173,7 +173,7 @@ const RouteWindow: React.FC<{
 
     useEffect((): void => {
         if (routeId) {
-            axios.get(`${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/${routeId}`, {
+            axios.get(`${SERVER_ROUTE_URI}/${API_V1_SINGLE_ROUTE_PREFIX}/${routeId}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${getToken()}`
@@ -214,18 +214,17 @@ const RouteWindow: React.FC<{
                 <MapComponent markersArray={markersArray} setMarkersArray={setMarkersArray}/>
                 {!routeId && <p>Вы уверены, что хотите создать маршрут?</p>}
                 <div className={styles.buttons}>
-                    {routeId && isAdmin() ? (
+                    {routeId && isAdmin() && routeStatus === "NEW" &&
                         <>
                             <button onClick={handleUpdate} className={styles.button}>Update</button>
                             <button onClick={handleDelete} className={styles.button}>Delete</button>
-                        </>
-                    ) : (
-                        isAdmin() ? (
-                            <button onClick={handleCreate} className={styles.button}>Create</button>
-                        ) : (
-                            <button onClick={handleUpdateProgression} className={styles.button}>Update</button>
-                        )
-                    )}
+                        </>}
+                    {routeId && !isAdmin() &&
+                        <button onClick={handleUpdateProgression} className={styles.button}>Update</button>
+                    }
+                    {!routeId &&
+                        <button onClick={handleCreate} className={styles.button}>Create</button>
+                    }
                     <button onClick={onCancel} className={styles.button}>Cancel</button>
                 </div>
             </div>

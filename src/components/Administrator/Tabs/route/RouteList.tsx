@@ -1,7 +1,7 @@
 import React, {JSX, useEffect, useState} from "react";
 import RouteItem from "./RouteItem";
 import axios, {AxiosResponse} from "axios";
-import {API_V1_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../../../util/Constants";
+import {API_V1_ROUTE_PREFIX, API_V1_USER_PREFIX, SERVER_ROUTE_URI} from "../../../../util/Constants";
 import {getToken} from "../../../../util/KeycloakService";
 import {useDispatch, useSelector} from "react-redux";
 import {RouteType, selectRoutes, setRoutes} from "../../../../redux/slices/RouteSlice";
@@ -71,7 +71,7 @@ const RouteList: React.FC<{
 
         const serverUri: string = isAdmin()
             ? `${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}?${additionalParams}`
-            : `${SERVER_ROUTE_URI}/${API_V1_ROUTE_PREFIX}/user/${parseJwt(getToken()).sub}?${additionalParams}`
+            : `${SERVER_ROUTE_URI}/${API_V1_USER_PREFIX}/${parseJwt(getToken()).sub}/routes?${additionalParams}`
 
         axios.get(serverUri, {
             headers: {
