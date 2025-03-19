@@ -1,16 +1,41 @@
 .tabs {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    justify-content: space-between;  /* Это заставит кнопку "Создать маршрут" быть слева, а вкладки - по центру */
     margin-bottom: 20px;
+    width: 100%;
 }
+
+.tabContainer {
+    display: flex;
+    gap: 10px;  /* Пробел между вкладками */
+    justify-content: center;  /* Центрируем вкладки */
+    flex-grow: 1;  /* Заставляем вкладки занимать все доступное пространство */
+}
+
 .tab {
     padding: 10px 20px;
     cursor: pointer;
     border: 1px solid #ccc;
+    font-weight: bold;
+}
+
+.tab.active {
     background: #155756;
 }
-.tab.active {
-    background: #007bff;
-    color: #fff;
-    border-color: #007bff;
+
+.tab:hover {
+    background-color: #2d8c8f;
+}
+
+.createButton {
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.createButton:hover {
+    background-color: #2d8c8f
 }

@@ -1,0 +1,65 @@
+.filterWrapper {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 15px 25px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #f8fafc;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.fieldContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #334155;
+}
+
+.input {
+    padding: 10px 12px;
+    border: 1px solid #94a3b8;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #1e293b;
+    outline: none;
+    width: 220px;
+    transition: border-color 0.2s;
+}
+
+.input:focus {
+    border-color: #1e40af;
+    box-shadow: 0 0 5px rgba(30, 64, 175, 0.5);
+}
+
+.applyButton {
+    background-color: #38a3a5;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.applyButton:hover {
+    background-color: #2d8c8f;
+}

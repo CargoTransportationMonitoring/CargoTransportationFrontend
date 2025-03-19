@@ -73,7 +73,7 @@ const CitySearch: React.FC<CitySearchProps> = ({handleCitySelectForMap}: CitySea
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setCityQuery(e.target.value)
                 }
-                placeholder="Search for a city"
+                placeholder="Поиск локации"
                 onFocus={() => setDropdownVisible(true)}
                 onBlur={handleBlur}
             />

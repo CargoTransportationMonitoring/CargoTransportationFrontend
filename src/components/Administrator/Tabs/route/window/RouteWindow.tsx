@@ -4,7 +4,7 @@ import MapComponent from "../../../../Map/MapComponent";
 import {setError, setInfo} from "../../../../../redux/slices/InfoTabSlice";
 import axios, {AxiosResponse} from "axios";
 import {getToken} from "../../../../../util/KeycloakService";
-import {API_V1_ROUTE_PREFIX, API_V1_SINGLE_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../../../../util/Constants";
+import {API_V1_SINGLE_ROUTE_PREFIX, SERVER_ROUTE_URI} from "../../../../../util/Constants";
 import {useDispatch} from "react-redux";
 import {Dispatch} from "@reduxjs/toolkit";
 import {addRoute, removeRoute} from "../../../../../redux/slices/RouteSlice";
@@ -199,7 +199,7 @@ const RouteWindow: React.FC<{
                     routeName={routeName}
                     description={description}
                     assignedUser={assignedUser}
-                    routeStatus={routeStatus}
+                    routeStatus={!!routeId ? routeStatus : undefined}
                     setRouteName={setRouteName}
                     setDescription={setDescription}
                     setAssignedUser={setAssignedUser}
@@ -212,20 +212,19 @@ const RouteWindow: React.FC<{
                 />
                 }
                 <MapComponent markersArray={markersArray} setMarkersArray={setMarkersArray}/>
-                {!routeId && <p>Вы уверены, что хотите создать маршрут?</p>}
                 <div className={styles.buttons}>
                     {routeId && isAdmin() && routeStatus === "NEW" &&
                         <>
-                            <button onClick={handleUpdate} className={styles.button}>Update</button>
-                            <button onClick={handleDelete} className={styles.button}>Delete</button>
+                            <button onClick={handleUpdate} className={styles.button}>Обновить</button>
+                            <button onClick={handleDelete} className={styles.button}>Удалить</button>
                         </>}
                     {routeId && !isAdmin() &&
-                        <button onClick={handleUpdateProgression} className={styles.button}>Update</button>
+                        <button onClick={handleUpdateProgression} className={styles.button}>Обновить</button>
                     }
                     {!routeId &&
-                        <button onClick={handleCreate} className={styles.button}>Create</button>
+                        <button onClick={handleCreate} className={styles.button}>Создать</button>
                     }
-                    <button onClick={onCancel} className={styles.button}>Cancel</button>
+                    <button onClick={onCancel} className={styles.button}>Отмена</button>
                 </div>
             </div>
         </div>

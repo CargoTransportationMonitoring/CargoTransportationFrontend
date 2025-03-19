@@ -8,26 +8,45 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: auto; /* Добавляем прокрутку */
+    padding: 20px; /* Добавляем отступы */
+    z-index: 1000;
 }
 
-/* Стили для модального окна */
 .modal {
-    background-color: #000000;
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh; /* Ограничиваем максимальную высоту */
+    overflow-y: auto; /* Добавляем прокрутку внутри модального окна */
+    margin: auto; /* Центрируем модальное окно */
 }
 
-/* Стили для кнопок */
+.modal h2 {
+    color: #00796b; /* Тёмно-бирюзовый */
+    margin-bottom: 20px;
+}
+
+.modal p {
+    color: #194b46; /* Более насыщенный бирюзовый */
+    margin-bottom: 20px;
+}
+
 .buttons {
-    margin-top: 20px;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
 .button {
+    background-color: #00796b; /* Тёмно-бирюзовый */
+    color: #ffffff; /* Белый текст */
+    border: none;
     padding: 10px 20px;
-    font-size: 16px;
+    border-radius: 4px;
     cursor: pointer;
+    font-weight: bold;
 }

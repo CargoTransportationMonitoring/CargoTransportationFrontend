@@ -83,7 +83,7 @@ const MapComponent: FC<{
         leaflet
             .tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 maxZoom: MAX_ZOOM,
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                attribution: '',
             })
             .addTo(mapRef.current);
 

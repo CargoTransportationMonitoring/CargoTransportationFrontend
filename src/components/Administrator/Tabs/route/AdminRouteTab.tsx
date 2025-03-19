@@ -10,9 +10,6 @@ const AdminRouteTab: React.FC = (): JSX.Element => {
 
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
-    const openModal = (): void => {
-        setModalOpen(true);
-    };
 
     const closeModal = (): void => {
         setModalOpen(false);
@@ -21,8 +18,9 @@ const AdminRouteTab: React.FC = (): JSX.Element => {
     return (
         <>
             <FilterByFields/>
-            <RouteList filter={filter}/>
-            <button onClick={openModal}>Create Route</button>
+            <RouteList filter={filter}
+                       setCreateModalOpen={setModalOpen}
+            />
             {isModalOpen && <RouteWindow onCancel={closeModal}/>}
         </>
     );

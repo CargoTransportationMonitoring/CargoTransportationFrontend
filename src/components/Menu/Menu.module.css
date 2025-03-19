@@ -1,0 +1,54 @@
+/* Контейнер навигации */
+.navbar {
+    display: flex;
+    justify-content: center; /* Центрируем элементы */
+    align-items: center;
+    background-color: #006D77;
+    padding: 15px 40px;
+    gap: 40px; /* Пространство между элементами */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Контейнер ссылок */
+.navLinks {
+    display: flex;
+    gap: 25px;
+}
+
+/* Стили для ссылок */
+.link {
+    font-size: 27px;
+    font-weight: 500;
+    color: #afb9c7; /* Светло-серый */
+    padding: 10px 15px;
+}
+
+/* При наведении просто меняется цвет */
+.link:hover {
+    color: #ffffff;
+}
+
+/* Активная ссылка без скачков */
+.activeLink {
+    text-decoration: underline;
+    color: #ffffff; /* Желтый */
+    text-decoration-thickness: 2px; /* Толщина линии, чтобы не было скачков */
+    text-underline-offset: 4px; /* Отступ линии, для красоты */
+    font-size: 27px;
+    font-weight: 500;
+    padding: 10px 15px;
+}
+
+/* Кнопка выхода */
+.logoutButton {
+    background-color: #38a3a5; /* Красная кнопка */
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+

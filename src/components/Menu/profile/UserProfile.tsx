@@ -9,11 +9,13 @@ import {useDispatch} from "react-redux";
 import {setError, setInfo} from "../../../redux/slices/InfoTabSlice";
 import DeleteProfileButton from "./DeleteProfileButton";
 import LinkAdminSection from "./LinkAdminSection";
+import styles from "./UserProfile.module.css"
+import LinkUserWindow from "../../Administrator/Tabs/users/LinkUserWindow";
 
 const UserProfile: React.FC = (): JSX.Element => {
 
     const tokenData: TokenId = parseJwt(getIdToken());
-    const [isModalOpen, setModalOpen] = useState<boolean>(false);
+    const [isModalUserOpen, setModalUserOpen] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [firstName, setFirstName] = useState<string>(tokenData.given_name);
     const [lastName, setLastName] = useState<string>(tokenData.family_name);
@@ -46,51 +48,55 @@ const UserProfile: React.FC = (): JSX.Element => {
         setIsEditing(!isEditing);
     };
 
-
-    const closeModal = (): void => {
-        setModalOpen(false);
+    const cancel = (): void => {
+        setIsEditing(false)
     }
 
     return (
         <div>
-            {!isAdmin() && <LinkAdminSection setModalOpen={setModalOpen}
-                                             adminUsername={adminUsername}
-                                             setAdminUsername={setAdminUsername}/>}
-            <h2>Email: {tokenData.email}</h2>
-            <div>
-                <label htmlFor="firstName">First name:</label>
-                {isEditing ? (
-                    <input
-                        type="text"
-                        value={firstName}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
+            {!isAdmin() &&
+                <div className={styles.profileContainer}>
+                    <LinkAdminSection setModalOpen={setModalUserOpen} adminUsername={adminUsername}
+                                      setAdminUsername={setAdminUsername}/>
+                </div>}
+            <div className={styles.profileContainer}>
+                <div className={styles.profileField}>
+                    <label className={styles.label}>Email:</label>
+                    <span>{tokenData.email}</span>
+                </div>
+
+                <div className={styles.profileField}>
+                    <label className={styles.label}>Имя:</label>
+                    {isEditing ? (
+                        <input className={styles.inputField} type="text" value={firstName}
+                               onChange={(e) => setFirstName(e.target.value)}/>
+                    ) : (
+                        <span>{firstName}</span>
+                    )}
+                </div>
+                <div className={styles.profileField}>
+                    <label className={styles.label}>Фамилия:</label>
+                    {isEditing ? (
+                        <input className={styles.inputField} type="text" value={lastName}
+                               onChange={(e) => setLastName(e.target.value)}/>
+                    ) : (
+                        <span>{lastName}</span>
+                    )}
+                </div>
+                <button onClick={toggleEditMode}>
+                    {isEditing ? "Сохранить" : "Редактировать"}
+                </button>
+                {isEditing && <button onClick={cancel} style={{
+                    marginLeft: 15
+                }}>Отмена</button>}
+                {!isAdmin() && !isEditing && <DeleteProfileButton/>}
+                {isModalUserOpen && (
+                    <UserLinkWindow
+                        onCancel={() => setModalUserOpen(false)}
+                        updateAdmin={setAdminUsername}
                     />
-                ) : (
-                    <h2 id="firstName">{firstName}</h2>
                 )}
             </div>
-            <div>
-                <label htmlFor="lastName">Last name:</label>
-                {isEditing ? (
-                    <input
-                        type="text"
-                        value={lastName}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
-                    />
-                ) : (
-                    <h2 id="lastName">{lastName}</h2>
-                )}
-            </div>
-            <button onClick={toggleEditMode}>
-                {isEditing ? "Сохранить" : "Редактировать"}
-            </button>
-            {!isAdmin() && <DeleteProfileButton/>}
-            {isModalOpen && (
-                <UserLinkWindow
-                    onCancel={closeModal}
-                    updateAdmin={setAdminUsername}
-                />
-            )}
         </div>
     );
 }

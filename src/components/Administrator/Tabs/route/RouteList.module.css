@@ -5,6 +5,7 @@
     font-size: 16px;
     text-align: left;
     border: 1px solid #ccc;
+    table-layout: fixed;
 }
 
 .routesTable th, .routesTable td {
@@ -28,18 +29,4 @@
 
 .routesTable tr:hover {
     background-color: #194b46; /* Более насыщенный бирюзовый */
-}
-
-.viewButton {
-    background-color: #ff5722; /* Оранжево-красный */
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-.viewButton:hover {
-    background-color: #e64a19; /* Более насыщенный оранжево-красный */
 }

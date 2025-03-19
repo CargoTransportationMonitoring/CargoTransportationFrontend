@@ -1,40 +1,36 @@
-.city-search-container {
-    position: relative;
-    width: 100%;
-    max-width: 400px;
+/* Например, в файле RouteAdminForm.module.css */
+.citySearchContainer {
+    margin-bottom: 20px;
 }
 
-.city-search-container input {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-}
-
-.city-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
+.citySearchContainer input {
+    width: 90%;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    max-height: 200px;
-    overflow-y: auto;
+    font-size: 16px;
+    color: #333;
+    margin-top: 8px;
+}
+
+.cityDropdown {
     list-style: none;
     padding: 0;
-    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 8px 0 0;
 }
 
-.city-dropdown-item {
-    padding: 8px;
+.cityDropdownItem {
+    padding: 10px;
     cursor: pointer;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: #333;
 }
 
-.city-dropdown-item:hover {
+.cityDropdownItem:hover {
     background-color: #f0f0f0;
 }

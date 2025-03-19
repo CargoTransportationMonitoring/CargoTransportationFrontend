@@ -1,33 +1,77 @@
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Стили для модального окна */
-.modal {
-    background-color: #000000;
+/* Основной контейнер */
+.profileContainer {
+    max-width: 600px;
+    margin: 40px auto;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    background-color: #006D77;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
 }
 
-/* Стили для кнопок */
-.buttons {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-around;
+/* Заголовки */
+.profileTitle {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
-.button {
-    padding: 10px 20px;
+/* Поля данных */
+.profileField {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+/* Метки */
+.label {
+    display: block;
+    font-size: 14px;
+    color: #bef2f6;
+    margin-bottom: 5px;
+}
+
+/* Поля ввода */
+.inputField {
+    width: 90%;
+    padding: 8px;
     font-size: 16px;
-    cursor: pointer;
+    border: 1px solid #bdedee;
+    border-radius: 5px;
+    background-color: #222;
+    color: #fff;
+    outline: none;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.inputField:focus {
+    background-color: #2a2a2a;
+    box-shadow: 0 0 5px rgba(189, 237, 238, 0.6);
+}
+
+
+/* Кнопка */
+
+.unlinkButton {
+    color: white;
+    display: block;
+    margin-top: 10px;
+}
+
+.linkButton {
+    color: white;
+    display: block;
+    margin-top: 10px;
+}
+
+.deleteButton {
+    margin-left: 15px
+}
+
+.saveButton {
+    background-color: #28a745;
+    color: white;
+}
+
+.saveButton:hover {
+    background-color: #1e7e34;
 }

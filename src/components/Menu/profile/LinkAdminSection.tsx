@@ -6,6 +6,7 @@ import {setError, setInfo} from "../../../redux/slices/InfoTabSlice";
 import {parseJwt, TokenId} from "../../../util/KeycloakUtils";
 import {Dispatch} from "@reduxjs/toolkit";
 import {useDispatch} from "react-redux";
+import styles from "./UserProfile.module.css"
 
 const LinkAdminSection: React.FC<{
     setModalOpen: (isOpen: boolean) => void
@@ -55,14 +56,15 @@ const LinkAdminSection: React.FC<{
     return (
         <div>
             {adminUsername
-                ? <>
-                    <h2>Your Administrator username: {adminUsername}</h2>
-                    <button onClick={handleUnlink}>Открепиться от администратора</button>
-                </>
-                : <>
-                    <h2>You are not attachment to any Administrator</h2>
-                    <button onClick={openModal}>Прилинковаться к администратору</button>
-                </>
+                ? <div className={styles.profileField}>
+                    <label className={styles.label}>Ваш администратор:</label>
+                    <span>{adminUsername}</span>
+                    <button className={`${styles.unlinkButton}`} onClick={handleUnlink}>Открепиться от администратора</button>
+                </div>
+                : <div className={styles.profileField}>
+                    <span>Вы не закреплены ни за одним администратором</span>
+                    <button className={styles.linkButton} onClick={openModal}>Закрепиться за администратором</button>
+                </div>
             }
         </div>
     )

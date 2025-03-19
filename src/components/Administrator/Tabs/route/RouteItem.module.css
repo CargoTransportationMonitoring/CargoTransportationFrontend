@@ -1,31 +1,9 @@
-/* Основной контейнер для элемента маршрута */
-.route-item {
-    padding: 10px;
-    margin: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.route-id {
-    font-size: 16px;
-    color: #333;
-    display: flex;
-    align-items: center;
-}
-
-/* Кнопка с иконкой "глаз" */
 .view-button {
+    background: none !important;
     margin-left: 10px;
-    background: none;
     border: none;
     cursor: pointer;
     font-size: 18px;
-    color: #007bff;
     transition: transform 0.2s ease-in-out;
 }
 

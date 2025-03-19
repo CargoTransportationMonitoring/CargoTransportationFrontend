@@ -1,30 +1,32 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from './CodeDisplay.module.css'
+import { Copy, Check } from "lucide-react";
 
 const CodeDisplay: React.FC<{
     generatedCode: String
 }> = ({generatedCode}) => {
+
+    const [copied, setCopied] = useState(false);
+
     const copyToClipboard = (): void => {
-        const textArea: any = document.createElement("textarea");
-        textArea.value = generatedCode;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textArea);
+        navigator.clipboard.writeText(String(generatedCode)).then((): void => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500); // Сбрасываем через 1.5 секунды
+        });
     };
 
     return (
-        <>
-            {generatedCode && (
-                <>
-                    <h2>Ваш сгенерированный код</h2>
-                    <div className={styles.codeContainer}>
-                        <pre>{generatedCode}</pre>
-                    </div>
-                    <button onClick={copyToClipboard}>Копировать код</button>
-                </>
-            )}
-        </>
+        generatedCode && (
+            <div className={styles.wrapper}>
+                <h2 className={styles.title}>Ваш сгенерированный код</h2>
+                <div className={styles.container}>
+                    <pre className={styles.code}>{generatedCode}</pre>
+                    <button className={styles.copyButton} onClick={copyToClipboard}>
+                        {copied ? <Check size={16} /> : <Copy size={16} />}
+                    </button>
+                </div>
+            </div>
+        )
     );
 };
 

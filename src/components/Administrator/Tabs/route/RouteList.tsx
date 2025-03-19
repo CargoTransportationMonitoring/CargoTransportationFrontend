@@ -24,7 +24,8 @@ type ResponseItemType = {
 
 const RouteList: React.FC<{
     filter?: FilterType
-}> = ({filter}): JSX.Element => {
+    setCreateModalOpen: (isModalOpen: boolean) => void
+}> = ({filter, setCreateModalOpen}): JSX.Element => {
 
     const [isModalOpen, setModalOpen] = useState<boolean>(false);
     const [activeRouteId, setActiveRouteId] = useState<string | undefined>(undefined);
@@ -38,7 +39,7 @@ const RouteList: React.FC<{
 
     const openModal = (): void => {
         setModalOpen(true);
-    };
+    }
 
     const closeModal = (): void => {
         setModalOpen(false);
@@ -95,16 +96,16 @@ const RouteList: React.FC<{
 
     return (
         <>
-            <StatusTabs/>
+            <StatusTabs setCreateModalOpen={setCreateModalOpen}/>
             <table className={styles.routesTable}>
                 <thead>
                 <tr>
-                    <th>Route ID</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Assigned Username</th>
-                    <th>Points Count</th>
-                    <th>Actions</th>
+                    <th>Идентификатор</th>
+                    <th>Наименование</th>
+                    <th>Описание</th>
+                    <th>Грузоперевозчик</th>
+                    <th>Количество точек</th>
+                    <th>Действие</th>
                 </tr>
                 </thead>
                 <tbody>

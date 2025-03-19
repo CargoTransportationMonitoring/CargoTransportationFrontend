@@ -4,6 +4,7 @@ import {CLIENT_ROOT_URI, KEYCLOAK_CLIENT_ID, KEYCLOAK_URI} from "../../util/Cons
 import {useDispatch} from "react-redux";
 import {Dispatch} from "@reduxjs/toolkit";
 import {setInfo} from "../../redux/slices/InfoTabSlice";
+import styles from "./Menu.module.css"
 
 const LogoutButton: React.FC = (): JSX.Element => {
 
@@ -22,7 +23,7 @@ const LogoutButton: React.FC = (): JSX.Element => {
 
 
     return (
-        <button onClick={handleLogout}>Logout</button>
+        <button className={styles.logoutButton} onClick={handleLogout}>Выйти</button>
     )
 }
 

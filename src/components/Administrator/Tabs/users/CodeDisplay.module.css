@@ -1,24 +1,46 @@
-.code-container {
-    max-height: 400px;  /* Установим максимальную высоту области */
-    overflow-y: auto;   /* Включаем вертикальную прокрутку, если контент превышает высоту */
-    border: 1px solid #ccc; /* Рамка для области */
-    padding: 10px;      /* Отступы внутри контейнера */
-    background-color: #f4f4f4; /* Цвет фона */
-    font-family: monospace; /* Моноширинный шрифт для кода */
-    white-space: pre-wrap; /* Сохраняем переносы строк */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 100%;
 }
 
-button {
-    padding: 10px 20px;
-    margin-top: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.title {
     font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 4px;
 }
 
-button:hover {
-    background-color: #0056b3;
+.container {
+    position: relative;
+    background: #1e1e1e;
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    max-width: 100%;
+    overflow-x: auto; /* Горизонтальный скролл */
+    white-space: pre; /* Отключаем перенос строк */
+    font-family: monospace;
+    font-size: 14px;
+}
+
+.code {
+    margin-right: 50px;
+}
+
+.copyButton {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #070000;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.copyButton:hover {
+    background: rgba(255, 255, 255, 0.2);
 }

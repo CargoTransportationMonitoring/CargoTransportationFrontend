@@ -1,13 +1,14 @@
 import React, {JSX} from "react";
-import styles from './RouteItem.module.css'
+import styles from "./RouteItem.module.css"
 import {RouteType} from "../../../../redux/slices/RouteSlice";
 
 const RouteItem: React.FC<{
     route: RouteType
     handleClick: (routeId: string) => void
 }> = ({route, handleClick}): JSX.Element => {
+
     return (
-        <tr className={styles.routeItem}>
+        <tr>
             <td>{route.id}</td>
             <td>{route.name}</td>
             <td>{route.description}</td>
@@ -15,9 +16,9 @@ const RouteItem: React.FC<{
             <td>{route.pointsCount}</td>
             <td>
                 <button
-                    className={styles.viewButton}
+                    className={styles["view-button"]}
                     onClick={() => handleClick(route.id)}
-                    title="View Details"
+                    title="Просмотр детальной информации"
                 >
                     👁️
                 </button>
