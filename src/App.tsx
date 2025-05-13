@@ -5,10 +5,9 @@ import InfoSection from "./components/Menu/info/InfoSection";
 import NotFound from "./components/NotFound/NotFound";
 import AdminRouteTab from "./components/Administrator/Tabs/route/AdminRouteTab";
 import CarrierRouteTab from "./components/СargoСarrier/Tabs/route/CarrierRouteTab";
-import {authenticate, getRole} from "./util/KeycloakUtils";
+import {authenticate, getRole, parseJwt, TokenId} from "./util/KeycloakUtils";
 import {
     getIdToken,
-    getKeycloakInstance,
     getToken,
     initKeycloak,
     isAuthenticated
@@ -16,6 +15,8 @@ import {
 import MainLayout from "./components/Menu/MainLayout";
 import UserProfile from "./components/Menu/profile/UserProfile";
 import UsersTab from "./components/Administrator/Tabs/users/UsersTab";
+import {Client} from "@stomp/stompjs";
+import startSharingLocation from "./util/GeolocationUtil";
 
 interface ProtectedRouteProps {
     requiredRoles: string[]
@@ -27,13 +28,24 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({requiredRoles}: Protecte
     }
 
     if (requiredRoles && requiredRoles.length > 0) {
-        const userRoles: string[] = getRole();
+        const userRoles: string = getRole();
         const hasAtLeastOneRole: boolean = requiredRoles.some((role: string) => userRoles.includes(role));
-        console.log('userRoles: ', userRoles)
         console.log(getToken())
         console.log(getIdToken())
         if (!hasAtLeastOneRole) {
             return <div>Доступ запрещён</div>;
+        }
+        if (userRoles !== 'admin') {
+            const client: Client = new Client({
+                brokerURL: 'ws://localhost:8084/ws', // endpoint из конфигурации
+                reconnectDelay: 5000,
+            });
+            const tokenId: TokenId = parseJwt(getIdToken())
+            client.onConnect = (): void => {
+                startSharingLocation(tokenId, client)
+                console.log('WebSocket подключен');
+            };
+            client.activate()
         }
     }
 
@@ -77,9 +89,7 @@ const App: React.FC = (): JSX.Element => {
                 </Route>
 
                 {/* 404 */}
-                <Route path="*" element={<NotFound role={
-                    getKeycloakInstance().resourceAccess['cargotransportation-client'].roles[0]
-                }/>}/>
+                <Route path="*" element={<NotFound role={getRole()}/>}/>
             </Routes>
             <InfoSection/>
         </BrowserRouter>

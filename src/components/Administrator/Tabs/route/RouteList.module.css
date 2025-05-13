@@ -1,3 +1,8 @@
+.tableWrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
 .routesTable {
     width: 100%;
     border-collapse: collapse;
@@ -5,8 +10,9 @@
     font-size: 16px;
     text-align: left;
     border: 1px solid #ccc;
-    table-layout: fixed;
+    /*min-width: 600px; !* Добавь это, если хочешь, чтобы была горизонтальная прокрутка *!*/
 }
+
 
 .routesTable th, .routesTable td {
     padding: 12px 15px;

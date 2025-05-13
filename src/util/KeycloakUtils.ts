@@ -7,12 +7,17 @@ import {
     KEYCLOAK_SCOPE,
     KEYCLOAK_URL
 } from "./Constants";
-import Keycloak from "keycloak-js";
 import {getKeycloakInstance} from "./KeycloakService";
 
-const ALGORITHM: string = 'SHA-256'
+export interface TokenId {
+    given_name: string,
+    family_name: string,
+    sub: string,
+    email: string,
+    adminUsername: string | undefined
+}
 
-const keycloak: Keycloak = getKeycloakInstance()
+const ALGORITHM: string = 'SHA-256'
 
 export const generateRandomState = (): string => {
     return uuidv4();
@@ -52,16 +57,7 @@ export const parseJwt = (token: string): TokenId => {
     return JSON.parse(jsonPayload);
 }
 
-export interface TokenId {
-    given_name: string,
-    family_name: string,
-    sub: string,
-    email: string,
-    adminUsername: string | undefined
-}
-
-
-export const authenticate = (): null => {
+export const authenticate = (): void => {
     const state: string = generateRandomState()
     const codeVerifier: string = generateCodeVerifier()
     generateCodeChallenge(codeVerifier).then((codeChallenge: string): void => {
@@ -77,15 +73,12 @@ export const authenticate = (): null => {
             `&code_challenge=${codeChallenge}` +
             `&code_challenge_method=${KEYCLOAK_CODE_CHALLENGE_METHOD}`;
     });
-
-    return null
 }
 
-export const getRole = (): string[] => {
-    return keycloak.resourceAccess['cargotransportation-client'].roles
+export const getRole = (): string => {
+    return getKeycloakInstance().realmAccess.roles.find((role: string): boolean => role === 'admin') === 'admin' ? 'admin' : 'user'
 }
-
 
 export const isAdmin = (): boolean => {
-    return getRole().find((role: string): boolean => role === 'admin') !== undefined
+    return getRole() === 'admin'
 }

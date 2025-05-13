@@ -1,0 +1,42 @@
+.not-found-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    background-color: #e0f2f1; /* Светлый зеленовато-бирюзовый фон */
+    text-align: center;
+}
+
+.not-found-title {
+    font-size: 6rem;
+    font-weight: bold;
+    color: #00796b; /* Темно-бирюзовый */
+    margin-bottom: 10px;
+}
+
+.not-found-text {
+    font-size: 1.5rem;
+    color: #194b46; /* Темно-зеленый */
+    margin-bottom: 20px;
+}
+
+.not-found-button {
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #13a89c; /* Бирюзовый */
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.not-found-button:hover {
+    background-color: #00796b; /* Темнее при наведении */
+}
+
+.not-found-button:visited {
+    color: white; /* Запрещаем изменение цвета после клика */
+}

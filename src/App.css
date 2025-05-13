@@ -110,3 +110,16 @@ button:hover {
 .leaflet-control-attribution {
   display: none;
 }
+
+.mapContainer {
+  max-width: 100%;
+  padding: 0 1rem;
+}
+
+#map {
+  width: 100%;
+  height: 400px; /* или меньше, например, 300px, если нужно сделать компактнее */
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-top: 1rem;
+}

@@ -6,7 +6,6 @@ import {setError, setInfo} from "../../../redux/slices/InfoTabSlice";
 import {authenticate, parseJwt, TokenId} from "../../../util/KeycloakUtils";
 import {Dispatch} from "@reduxjs/toolkit";
 import {useDispatch} from "react-redux";
-import styles from "./UserProfile.module.css";
 
 const DeleteProfileButton: React.FC = (): JSX.Element => {
 
@@ -31,7 +30,7 @@ const DeleteProfileButton: React.FC = (): JSX.Element => {
     }
 
     return (
-        <button className={styles.deleteButton} onClick={deleteProfile}>Удалить профиль</button>
+        <button onClick={deleteProfile}>Удалить профиль</button>
     )
 }
 

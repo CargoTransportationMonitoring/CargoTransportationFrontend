@@ -3,13 +3,13 @@ import LinkUserWindow from "./LinkUserWindow";
 
 const UsersTab: React.FC = (): JSX.Element => {
 
-    const [isModalAdminOpen, setModalAdminOpen] = useState<boolean>(false);
+    const [isModalAdminOpen, setIsModalAdminOpen] = useState<boolean>(false);
 
     return (
         <>
             <div>
-                <button onClick={() => setModalAdminOpen(true)}>Прикрепить грузоперевозчика</button>
-                <LinkUserWindow onCancel={() => setModalAdminOpen(false)} isOpen={isModalAdminOpen}/>
+                <button onClick={() => setIsModalAdminOpen(true)}>Прикрепить грузоперевозчика</button>
+                <LinkUserWindow onCancel={() => setIsModalAdminOpen(false)} isOpen={isModalAdminOpen}/>
             </div>
             <div>
 

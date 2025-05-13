@@ -4,15 +4,20 @@
     justify-content: center; /* Центрируем элементы */
     align-items: center;
     background-color: #006D77;
-    padding: 15px 40px;
+    padding: 12px 16px;
     gap: 40px; /* Пространство между элементами */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #ddd;
+    overflow-x: auto;
 }
 
 /* Контейнер ссылок */
 .navLinks {
     display: flex;
-    gap: 25px;
+    gap: 16px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    max-width: 100%;
 }
 
 /* Стили для ссылок */

@@ -4,6 +4,7 @@
     justify-content: space-between;  /* Это заставит кнопку "Создать маршрут" быть слева, а вкладки - по центру */
     margin-bottom: 20px;
     width: 100%;
+    overflow-x: auto;
 }
 
 .tabContainer {

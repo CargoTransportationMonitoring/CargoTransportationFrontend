@@ -1,12 +1,12 @@
-import React, { JSX, useEffect, useState } from "react";
-import axios, { AxiosResponse } from "axios";
-import { SERVER_CORE_URI } from "../../../../../util/Constants";
-import { getToken } from "../../../../../util/KeycloakService";
-import { setError } from "../../../../../redux/slices/InfoTabSlice";
-import { useDispatch } from "react-redux";
-import { Dispatch } from "@reduxjs/toolkit";
-import { UserType } from "../../../../Menu/filter/FilterByFields";
-import { ROUTE_STATUS_MAP } from "../../StatusTabs";
+import React, {JSX, useEffect, useState} from "react";
+import axios, {AxiosResponse} from "axios";
+import {SERVER_CORE_URI} from "../../../../../util/Constants";
+import {getToken} from "../../../../../util/KeycloakService";
+import {setError} from "../../../../../redux/slices/InfoTabSlice";
+import {useDispatch} from "react-redux";
+import {Dispatch} from "@reduxjs/toolkit";
+import {UserType} from "../../../../Menu/filter/FilterByFields";
+import {ROUTE_STATUS_MAP} from "../../StatusTabs";
 
 const RouteAdminForm: React.FC<{
     routeName: string,
@@ -51,7 +51,7 @@ const RouteAdminForm: React.FC<{
             maxWidth: "500px",
             margin: "0 auto"
         }}>
-            <div style={{ marginBottom: "20px" }}>
+            <div style={{marginBottom: "20px"}}>
                 <label style={{
                     display: "block",
                     fontWeight: "bold",
@@ -77,7 +77,7 @@ const RouteAdminForm: React.FC<{
                     />
                 </label>
             </div>
-            <div style={{ marginBottom: "20px" }}>
+            <div style={{marginBottom: "20px"}}>
                 <label style={{
                     display: "block",
                     fontWeight: "bold",
@@ -105,7 +105,7 @@ const RouteAdminForm: React.FC<{
                     />
                 </label>
             </div>
-            <div style={{ marginBottom: "20px" }}>
+            <div style={{marginBottom: "20px"}}>
                 <label style={{
                     display: "block",
                     fontWeight: "bold",
@@ -136,14 +136,17 @@ const RouteAdminForm: React.FC<{
                     </select>
                 </label>
             </div>
-            {!!routeStatus && <div style={{ marginBottom: "20px" }}>
+            {!!routeStatus && <div style={{marginBottom: "20px"}}>
                 <label style={{
                     display: "block",
                     fontWeight: "bold",
                     marginBottom: "8px",
                     color: "#00796b"
                 }}>
-                    Статус маршрута: <h3 style={{ color: "#194b46", margin: "0" }}>{!!routeStatus ? ROUTE_STATUS_MAP.get(routeStatus) : routeStatus}</h3>
+                    Статус маршрута: <h3 style={{
+                    color: "#194b46",
+                    margin: "0"
+                }}>{!!routeStatus ? ROUTE_STATUS_MAP.get(routeStatus) : routeStatus}</h3>
                 </label>
             </div>}
         </div>

@@ -211,7 +211,10 @@ const RouteWindow: React.FC<{
                     setRouteStatus={setRouteStatus}
                 />
                 }
-                <MapComponent markersArray={markersArray} setMarkersArray={setMarkersArray}/>
+                <MapComponent markersArray={markersArray}
+                              setMarkersArray={setMarkersArray}
+                              routeStatus={!!routeId ? routeStatus : undefined}
+                              email={assignedUser}/>
                 <div className={styles.buttons}>
                     {routeId && isAdmin() && routeStatus === "NEW" &&
                         <>

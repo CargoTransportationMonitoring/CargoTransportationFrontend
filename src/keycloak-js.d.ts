@@ -13,7 +13,7 @@ declare module 'keycloak-js' {
         authenticated?: boolean;
         token: string;
         idToken: string;
-        realmAccess?: Keycloak.KeycloakRoles;
+        realmAccess: Keycloak.KeycloakRoles;
         resourceAccess: Keycloak.KeycloakResourceAccess;
 
         onAuthSuccess?: () => void;

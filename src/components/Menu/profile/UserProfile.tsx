@@ -10,12 +10,11 @@ import {setError, setInfo} from "../../../redux/slices/InfoTabSlice";
 import DeleteProfileButton from "./DeleteProfileButton";
 import LinkAdminSection from "./LinkAdminSection";
 import styles from "./UserProfile.module.css"
-import LinkUserWindow from "../../Administrator/Tabs/users/LinkUserWindow";
 
 const UserProfile: React.FC = (): JSX.Element => {
 
     const tokenData: TokenId = parseJwt(getIdToken());
-    const [isModalUserOpen, setModalUserOpen] = useState<boolean>(false);
+    const [isModalUserOpen, setIsModalUserOpen] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [firstName, setFirstName] = useState<string>(tokenData.given_name);
     const [lastName, setLastName] = useState<string>(tokenData.family_name);
@@ -56,7 +55,7 @@ const UserProfile: React.FC = (): JSX.Element => {
         <div>
             {!isAdmin() &&
                 <div className={styles.profileContainer}>
-                    <LinkAdminSection setModalOpen={setModalUserOpen} adminUsername={adminUsername}
+                    <LinkAdminSection setModalOpen={setIsModalUserOpen} adminUsername={adminUsername}
                                       setAdminUsername={setAdminUsername}/>
                 </div>}
             <div className={styles.profileContainer}>
@@ -83,7 +82,7 @@ const UserProfile: React.FC = (): JSX.Element => {
                         <span>{lastName}</span>
                     )}
                 </div>
-                <button onClick={toggleEditMode}>
+                <button onClick={toggleEditMode} className={styles.editButton}>
                     {isEditing ? "Сохранить" : "Редактировать"}
                 </button>
                 {isEditing && <button onClick={cancel} style={{
@@ -92,7 +91,7 @@ const UserProfile: React.FC = (): JSX.Element => {
                 {!isAdmin() && !isEditing && <DeleteProfileButton/>}
                 {isModalUserOpen && (
                     <UserLinkWindow
-                        onCancel={() => setModalUserOpen(false)}
+                        onCancel={() => setIsModalUserOpen(false)}
                         updateAdmin={setAdminUsername}
                     />
                 )}

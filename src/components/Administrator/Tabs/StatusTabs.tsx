@@ -3,6 +3,7 @@ import {setStatus} from "../../../redux/slices/FilterSlice";
 import {Dispatch} from "@reduxjs/toolkit";
 import styles from "./StatusTabs.module.css"
 import {useDispatch} from "react-redux";
+import {isAdmin} from "../../../util/KeycloakUtils";
 
 const TABS: string[] = ["NEW", "IN_PROGRESS", "COMPLETED"];
 export const ROUTE_STATUS_MAP= new Map<string, string>([
@@ -29,7 +30,7 @@ const StatusTabs: FC<{
 
     return (
         <div className={styles.tabs}>
-            <button className={styles.createButton} onClick={openModal}>Создать маршрут</button>
+            {isAdmin() && <button className={styles.createButton} onClick={openModal}>Создать маршрут</button>}
             <div className={styles.tabContainer}>
                 {TABS.map((tab: string) => (
                     <button

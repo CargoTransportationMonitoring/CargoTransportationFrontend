@@ -7,13 +7,18 @@ interface NotFoundProps {
 
 const NotFound: React.FC<NotFoundProps> = ({role}: NotFoundProps): JSX.Element => {
 
-
     return (
-        <>
-            <h1>Page Not Found.</h1>
-            <NavLink to={role === 'admin' ? '/admin' : '/main'}>Main Page</NavLink>
-        </>
-    )
+        <div className="not-found-container">
+            <h1 className="not-found-title">404</h1>
+            <p className="not-found-text">Oops! Page Not Found.</p>
+            <NavLink
+                to={role === 'admin' ? '/admin/profile' : '/main/profile'}
+                className="not-found-button"
+            >
+                Go to Main Page
+            </NavLink>
+        </div>
+    );
 }
 
 export default NotFound

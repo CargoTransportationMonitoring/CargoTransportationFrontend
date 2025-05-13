@@ -97,33 +97,35 @@ const RouteList: React.FC<{
     return (
         <>
             <StatusTabs setCreateModalOpen={setCreateModalOpen}/>
-            <table className={styles.routesTable}>
-                <thead>
-                <tr>
-                    <th>Идентификатор</th>
-                    <th>Наименование</th>
-                    <th>Описание</th>
-                    <th>Грузоперевозчик</th>
-                    <th>Количество точек</th>
-                    <th>Действие</th>
-                </tr>
-                </thead>
-                <tbody>
-                {routes.map((route: RouteType) => (
-                    <RouteItem
-                        key={route.id}
-                        route={route}
-                        handleClick={handleViewRouteClick}
+            <div className={styles.tableWrapper}>
+                <table className={styles.routesTable}>
+                    <thead>
+                    <tr>
+                        <th>Идентификатор</th>
+                        <th>Наименование</th>
+                        <th>Описание</th>
+                        <th>Грузоперевозчик</th>
+                        <th>Количество точек</th>
+                        <th>Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {routes.map((route: RouteType) => (
+                        <RouteItem
+                            key={route.id}
+                            route={route}
+                            handleClick={handleViewRouteClick}
+                        />
+                    ))}
+                    </tbody>
+                </table>
+                {isModalOpen && (
+                    <RouteWindow
+                        onCancel={closeModal}
+                        routeId={activeRouteId}
                     />
-                ))}
-                </tbody>
-            </table>
-            {isModalOpen && (
-                <RouteWindow
-                    onCancel={closeModal}
-                    routeId={activeRouteId}
-                />
-            )}
+                )}
+            </div>
         </>
     )
 }
